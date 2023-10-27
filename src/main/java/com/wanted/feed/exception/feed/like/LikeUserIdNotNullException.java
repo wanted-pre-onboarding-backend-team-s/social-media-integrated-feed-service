@@ -1,8 +1,6 @@
 package com.wanted.feed.exception.feed.like;
 
-public class LikeUserIdNotNullException extends IllegalArgumentException {
+import com.wanted.feed.exception.WantedException;
 
-    public LikeUserIdNotNullException() {
-        super("userId 는 Null 일 수 없습니다.");
-    }
+public class LikeUserIdNotNullException extends WantedException {
 }

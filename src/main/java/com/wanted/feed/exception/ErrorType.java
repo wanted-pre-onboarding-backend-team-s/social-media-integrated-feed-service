@@ -1,5 +1,7 @@
 package com.wanted.feed.exception;
 
+import com.wanted.feed.exception.feed.like.LikeFeedIdNotNullException;
+import com.wanted.feed.exception.feed.like.LikeUserIdNotNullException;
 import java.util.Arrays;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -9,7 +11,10 @@ import org.springframework.http.HttpStatus;
 @Getter
 @AllArgsConstructor
 public enum ErrorType {
-    U001("U001", "에러 메시지를 담습니다.", WantedException.class, HttpStatus.NOT_FOUND);
+    U001("U001", "에러 메시지를 담습니다.", WantedException.class, HttpStatus.NOT_FOUND),
+
+    L001("L001", "FeedId는 Null 이 될 수 없습니다.", LikeFeedIdNotNullException.class, HttpStatus.INTERNAL_SERVER_ERROR),
+    L002("L002", "UserId는 Null 이 될 수 없습니다.", LikeUserIdNotNullException.class, HttpStatus.INTERNAL_SERVER_ERROR);
 
     private final String code;
     private final String message;
