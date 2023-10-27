@@ -1,5 +1,6 @@
 package com.wanted.feed.exception;
 
+import com.wanted.feed.feed.exception.FeedNotFoundException;
 import com.wanted.feed.user.exception.DuplicateUserException;
 import java.util.Arrays;
 import java.util.List;
@@ -11,7 +12,8 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 public enum ErrorType {
     U001("U001", "에러 메시지를 담습니다.", WantedException.class, HttpStatus.NOT_FOUND),
-    J001("J001", "중복된 계정입니다.", DuplicateUserException.class, HttpStatus.CONFLICT);
+    J001("J001", "중복된 계정입니다.", DuplicateUserException.class, HttpStatus.CONFLICT),
+    F001("F001", "피드가 존재하지 않습니다.", FeedNotFoundException.class, HttpStatus.NOT_FOUND);
 
     private final String code;
     private final String message;
@@ -21,8 +23,8 @@ public enum ErrorType {
 
     public static ErrorType of(Class<? extends WantedException> classType) {
         return errorTypes.stream()
-                         .filter(it -> it.classType.equals(classType))
-                         .findFirst()
-                         .orElseThrow(RuntimeException::new);
+            .filter(it -> it.classType.equals(classType))
+            .findFirst()
+            .orElseThrow(RuntimeException::new);
     }
 }
