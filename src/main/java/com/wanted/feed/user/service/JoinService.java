@@ -1,6 +1,5 @@
 package com.wanted.feed.user.service;
 
-import com.wanted.feed.exception.ErrorType;
 import com.wanted.feed.exception.WantedException;
 import com.wanted.feed.user.domain.AuthCode;
 import com.wanted.feed.user.domain.AuthCodeRepository;
@@ -8,6 +7,7 @@ import com.wanted.feed.user.domain.User;
 import com.wanted.feed.user.domain.UserRepository;
 import com.wanted.feed.user.dto.JoinRequestDto;
 import com.wanted.feed.user.dto.JoinResponseDto;
+import com.wanted.feed.user.exception.DuplicateUserException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Random;
@@ -39,7 +39,7 @@ public class JoinService {
 
     private void validateDuplicateUsername(String username) {
         if (userRepository.existsByUsername(username)) {
-            throw new WantedException(ErrorType.CONFLICT_USERNAME);
+            throw new DuplicateUserException();
         }
     }
 
@@ -63,7 +63,7 @@ public class JoinService {
 
             return builder.toString();
         } catch (NoSuchAlgorithmException e) {
-            throw new WantedException(ErrorType.INTERNAL_SERVER_ERROR);
+            throw new WantedException();
         }
     }
 }

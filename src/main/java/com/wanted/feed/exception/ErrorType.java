@@ -1,5 +1,6 @@
 package com.wanted.feed.exception;
 
+import com.wanted.feed.user.exception.DuplicateUserException;
 import java.util.Arrays;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -10,9 +11,7 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 public enum ErrorType {
     U001("U001", "에러 메시지를 담습니다.", WantedException.class, HttpStatus.NOT_FOUND),
-
-    CONFLICT_USERNAME("409", "중복된 계정입니다.", WantedException.class, HttpStatus.CONFLICT),
-    INTERNAL_SERVER_ERROR("500", "정의되지 않은 에러가 발생했습니다.", WantedException.class, HttpStatus.INTERNAL_SERVER_ERROR);
+    J001("J001", "중복된 계정입니다.", DuplicateUserException.class, HttpStatus.CONFLICT);
 
     private final String code;
     private final String message;
