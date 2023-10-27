@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Feed {
+
     @Id
     @GeneratedValue
     private Long id;
@@ -33,6 +34,7 @@ public class Feed {
         this.type = type;
         this.title = title;
         this.content = content;
+        this.viewCount = 0;
         this.contentId = contentId;
     }
 }
