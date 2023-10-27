@@ -9,6 +9,10 @@ import com.wanted.feed.user.dto.ApprovalRequestDto;
 import com.wanted.feed.user.dto.JoinRequestDto;
 import com.wanted.feed.user.dto.JoinResponseDto;
 import com.wanted.feed.user.exception.DuplicateUserException;
+import com.wanted.feed.user.exception.MismatchAuthCodeException;
+import com.wanted.feed.user.exception.MismatchPasswordException;
+import com.wanted.feed.user.exception.NotFoundAuthCodeException;
+import com.wanted.feed.user.exception.NotFoundUsernameException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Random;
@@ -42,17 +46,17 @@ public class JoinService {
     public void approve(ApprovalRequestDto approvalRequestDto) {
         String username = approvalRequestDto.getUsername();
         User user = userRepository.findByUsernameAndApproved(username, false)
-                                  .orElseThrow(WantedException::new);
+                                  .orElseThrow(NotFoundUsernameException::new);
 
         if (!passwordEncoder.matches(approvalRequestDto.getPassword(), user.getPassword())) {
-            throw new WantedException();
+            throw new MismatchPasswordException();
         }
 
         AuthCode authCode = authCodeRepository.findTopByUsernameOrderByCreatedAtDesc(username)
-                                              .orElseThrow(WantedException::new);
+                                              .orElseThrow(NotFoundAuthCodeException::new);
 
         if (!authCode.getCode().equals(approvalRequestDto.getCode())) {
-            throw new WantedException();
+            throw new MismatchAuthCodeException();
         }
 
         user.approveUser();
