@@ -13,26 +13,25 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Feed {
+
     @Id
     @GeneratedValue
     private Long id;
-
     private String type;
-
     @Lob
     private String title;
-
     private String content;
-
     private int viewCount;
-
     private String contentId;
 
     @Builder
-    public Feed(String type, String title, String content, String contentId) {
+    public Feed(String type, String title, String content, int viewCount,
+        String contentId) {
         this.type = type;
         this.title = title;
         this.content = content;
+        this.viewCount = viewCount;
         this.contentId = contentId;
     }
+
 }
