@@ -5,6 +5,7 @@ import com.wanted.feed.user.domain.AuthCode;
 import com.wanted.feed.user.domain.AuthCodeRepository;
 import com.wanted.feed.user.domain.User;
 import com.wanted.feed.user.domain.UserRepository;
+import com.wanted.feed.user.dto.ApprovalRequestDto;
 import com.wanted.feed.user.dto.JoinRequestDto;
 import com.wanted.feed.user.dto.JoinResponseDto;
 import com.wanted.feed.user.exception.DuplicateUserException;
@@ -35,6 +36,26 @@ public class JoinService {
         saveCode(joinRequest, randomCode);
 
         return new JoinResponseDto(user.getUsername(), randomCode);
+    }
+
+    @Transactional
+    public void approve(ApprovalRequestDto approvalRequestDto) {
+        String username = approvalRequestDto.getUsername();
+        User user = userRepository.findByUsernameAndApproved(username, false)
+                                  .orElseThrow(WantedException::new);
+
+        if (!passwordEncoder.matches(approvalRequestDto.getPassword(), user.getPassword())) {
+            throw new WantedException();
+        }
+
+        AuthCode authCode = authCodeRepository.findTopByUsernameOrderByCreatedAtDesc(username)
+                                              .orElseThrow(WantedException::new);
+
+        if (!authCode.getCode().equals(approvalRequestDto.getCode())) {
+            throw new WantedException();
+        }
+
+        user.approveUser();
     }
 
     private void validateDuplicateUsername(String username) {
