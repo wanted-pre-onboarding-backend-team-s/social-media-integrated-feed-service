@@ -18,8 +18,8 @@ public class Feed {
     @GeneratedValue
     private Long id;
     private String type;
-    @Lob
     private String title;
+    @Lob
     private String content;
     private int viewCount;
     private String contentId;
