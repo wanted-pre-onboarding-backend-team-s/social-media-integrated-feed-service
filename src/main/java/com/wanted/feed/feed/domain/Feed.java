@@ -1,5 +1,6 @@
 package com.wanted.feed.feed.domain;
 
+import com.wanted.feed.common.domain.entity.BaseTimeEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -12,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "feeds")
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Feed {
+public class Feed extends BaseTimeEntity {
 
     @Id
     @GeneratedValue
