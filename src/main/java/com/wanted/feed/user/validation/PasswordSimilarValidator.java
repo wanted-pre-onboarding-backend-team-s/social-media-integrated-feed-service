@@ -12,6 +12,8 @@ public class PasswordSimilarValidator implements ConstraintValidator<PasswordSim
     private String email;
     private String password;
 
+    private static final String AT = "@";
+
     @Override
     public void initialize(PasswordSimilar constraintAnnotation) {
         username = constraintAnnotation.username();
@@ -25,7 +27,7 @@ public class PasswordSimilarValidator implements ConstraintValidator<PasswordSim
         String emailField = (String) new BeanWrapperImpl(value).getPropertyValue(email);
         String passwordField = (String) new BeanWrapperImpl(value).getPropertyValue(password);
 
-        emailField = emailField.substring(0, emailField.indexOf("@"));
+        emailField = emailField.substring(0, emailField.indexOf(AT));
 
         return !passwordField.contains(usernameField) && !passwordField.contains(emailField);
     }

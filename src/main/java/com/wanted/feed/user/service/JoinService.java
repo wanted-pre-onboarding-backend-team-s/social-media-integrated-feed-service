@@ -11,33 +11,25 @@ import com.wanted.feed.user.dto.JoinResponseDto;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Random;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@RequiredArgsConstructor
 public class JoinService {
 
     private final UserRepository userRepository;
     private final AuthCodeRepository authCodeRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public JoinService(UserRepository userRepository,
-            AuthCodeRepository authCodeRepository, PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.authCodeRepository = authCodeRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
-
     @Transactional
     public JoinResponseDto join(JoinRequestDto joinRequest) {
         validateDuplicateUsername(joinRequest.getUsername());
 
-        User user = userRepository.save(User.builder()
-                                            .username(joinRequest.getUsername())
-                                            .email(joinRequest.getEmail())
-                                            .password(passwordEncoder.encode(joinRequest.getPassword()))
-                                            .build());
+        User user = userRepository.save(joinRequest.toEntity());
+        user.changePassword(passwordEncoder.encode(joinRequest.getPassword()));
 
         String randomCode = createCode();
         saveCode(joinRequest, randomCode);

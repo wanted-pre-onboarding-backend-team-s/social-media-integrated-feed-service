@@ -1,5 +1,6 @@
 package com.wanted.feed.user.dto;
 
+import com.wanted.feed.user.domain.User;
 import com.wanted.feed.user.validation.PasswordSimilar;
 import com.wanted.feed.user.validation.ValidationGroups;
 import jakarta.validation.constraints.NotBlank;
@@ -39,5 +40,13 @@ public class JoinRequestDto {
         this.username = username;
         this.email = email;
         this.password = password;
+    }
+
+    public User toEntity() {
+        return User.builder()
+                   .username(username)
+                   .email(email)
+                   .password(password)
+                   .build();
     }
 }
