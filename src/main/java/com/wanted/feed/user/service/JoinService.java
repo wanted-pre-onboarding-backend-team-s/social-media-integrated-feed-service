@@ -48,18 +48,25 @@ public class JoinService {
         User user = userRepository.findByUsernameAndApproved(username, false)
                                   .orElseThrow(NotFoundUsernameException::new);
 
-        if (!passwordEncoder.matches(approvalRequestDto.getPassword(), user.getPassword())) {
+        checkPassword(approvalRequestDto.getPassword(), user);
+        checkAuthCode(approvalRequestDto.getCode(), username);
+
+        user.approveUser();
+    }
+
+    private void checkPassword(String confirmPassword, User user) {
+        if (!passwordEncoder.matches(confirmPassword, user.getPassword())) {
             throw new MismatchPasswordException();
         }
+    }
 
+    private void checkAuthCode(String confirmCode, String username) {
         AuthCode authCode = authCodeRepository.findTopByUsernameOrderByCreatedAtDesc(username)
                                               .orElseThrow(NotFoundAuthCodeException::new);
 
-        if (!authCode.getCode().equals(approvalRequestDto.getCode())) {
+        if (!authCode.getCode().equals(confirmCode)) {
             throw new MismatchAuthCodeException();
         }
-
-        user.approveUser();
     }
 
     private void validateDuplicateUsername(String username) {
