@@ -14,6 +14,20 @@ public class FeedService {
 
     private final FeedRepository feedRepository;
 
+    @Transactional
+    public FeedDetailResponseDto findFeedDetail(Long id) {
+        Feed feed = findFeedById(id);
+
+        feed.updateViews();
+        return new FeedDetailResponseDto(
+            feed.getType(),
+            feed.getTitle(),
+            feed.getContent(),
+            feed.getViewCount(),
+            feed.getContentId()
+        );
+    }
+
     @Transactional(readOnly = true)
     public Feed findFeedById(Long id) {
         return feedRepository.findById(id)
