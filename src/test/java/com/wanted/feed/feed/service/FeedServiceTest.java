@@ -72,4 +72,22 @@ class FeedServiceTest {
         assertThat(result.getContentId()).isEqualTo(FEED_CONTENT_ID);
     }
 
+    @DisplayName("피드 상세 조회시 조회수 1 증가")
+    @Test
+    void find_feed_detail_update_view_count() {
+        Feed feed = Feed.builder()
+            .type(FEED_TYPE)
+            .title(FEED_TITLE)
+            .content(FEED_CONTENT)
+            .viewCount(FEED_VIEW_COUNT)
+            .contentId(FEED_CONTENT_ID)
+            .build();
+
+        doReturn(Optional.of(feed)).when(feedRepository).findById(FEED_ID);
+
+        final FeedDetailResponseDto result = feedService.findFeedDetail(FEED_ID);
+
+        assertThat(result.getViewCount()).isEqualTo(FEED_VIEW_COUNT + 1);
+    }
+
 }
