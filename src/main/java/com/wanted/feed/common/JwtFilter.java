@@ -45,7 +45,7 @@ public class JwtFilter extends OncePerRequestFilter {
         String token = authorization.split(" ")[1];
 
         try {
-            TokenProvider.validationToken(token, secretKey);
+            TokenProvider.verifyToken(token, secretKey);
         } catch (ExpiredJwtException e) {
             log.error("[ExpiredJwtException] ex", e);
             jwtExceptionHandler(response, e);

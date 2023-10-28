@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -30,7 +31,7 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-/*    @Bean
+    @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return web -> web.ignoring().requestMatchers(
                 "/v3/api-docs",
@@ -39,7 +40,7 @@ public class SecurityConfig {
                 "/swagger-ui/**",
                 "/join",
                 "/login");
-    }*/
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
@@ -50,19 +51,6 @@ public class SecurityConfig {
                 sessionManager -> sessionManager
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         );
-
-        httpSecurity.authorizeHttpRequests(
-                authorize -> authorize
-                        .requestMatchers(
-                                "/v3/api-docs",
-                                "/v3/api-docs/**",
-                                "/swagger-ui.html",
-                                "/swagger-ui/**",
-                                "/join",
-                                "/login").permitAll()
-                        .anyRequest().authenticated()
-        );
-
         httpSecurity.addFilterBefore(new JwtFilter(userRepository, secretKey), UsernamePasswordAuthenticationFilter.class);
 
         return httpSecurity.build();

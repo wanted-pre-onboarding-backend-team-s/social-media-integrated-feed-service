@@ -1,34 +1,25 @@
 package com.wanted.feed.common.util;
 
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.UnsupportedJwtException;
+import jakarta.xml.bind.DatatypeConverter;
 import java.util.Date;
+import javax.crypto.spec.SecretKeySpec;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class TokenProvider {
 
+    private static final SignatureAlgorithm SIGNATURE_ALGORITHM = SignatureAlgorithm.HS256;
+
     public static Long getUserId(String token, String secretKey) {
-        return Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token)
-                .getBody().get("userId", Long.class);
+        return verifyToken(token, secretKey).getBody().get("userId", Long.class);
     }
 
-    public static void validationToken(String token, String secretKey) {
-        try {
-            Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token);
-        } catch (SecurityException | MalformedJwtException e) {
-            log.error("[" + e.getClass().getName() + "] ex", e.getMessage());
-        } catch (ExpiredJwtException e) {
-            log.error("[ExpiredJwtException] ex", e.getMessage());
-        } catch (UnsupportedJwtException e) {
-            log.error("[UnsupportedJwtException] ex", e.getMessage());
-        } catch (IllegalArgumentException e) {
-            log.error("[IllegalArgumentException] ex", e.getMessage());
-        }
+    public static Jws<Claims> verifyToken(String token, String secretKey) {
+        return Jwts.parserBuilder().setSigningKey(getSigningKey(secretKey)).build().parseClaimsJws(token);
     }
 
     public static String createJwt(Long userId, String secretKey, Long expiredMs) {
@@ -40,7 +31,12 @@ public class TokenProvider {
                 .setClaims(claims)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + expiredMs))
-                .signWith(SignatureAlgorithm.HS256, secretKey)
+                .signWith(getSigningKey(secretKey), SIGNATURE_ALGORITHM)
                 .compact();
+    }
+
+    private static SecretKeySpec getSigningKey(String secretKey) {
+        return new SecretKeySpec(DatatypeConverter.parseBase64Binary(secretKey),
+                SIGNATURE_ALGORITHM.getJcaName());
     }
 }
