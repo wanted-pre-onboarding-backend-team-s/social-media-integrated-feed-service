@@ -28,12 +28,12 @@ public class Feed extends BaseTimeEntity {
     private String contentId;
 
     @Builder
-    public Feed(String type, String title, String content, int viewCount,
+    public Feed(String type, String title, String content,
         String contentId) {
         this.type = type;
         this.title = title;
         this.content = content;
-        this.viewCount = viewCount;
+        this.viewCount = 0;
         this.contentId = contentId;
     }
 
