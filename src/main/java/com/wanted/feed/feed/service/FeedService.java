@@ -19,13 +19,7 @@ public class FeedService {
         Feed feed = findFeedById(id);
 
         feed.updateViews();
-        return new FeedDetailResponseDto(
-            feed.getType(),
-            feed.getTitle(),
-            feed.getContent(),
-            feed.getViewCount(),
-            feed.getContentId()
-        );
+        return FeedDetailResponseDto.of(feed);
     }
 
     @Transactional(readOnly = true)
