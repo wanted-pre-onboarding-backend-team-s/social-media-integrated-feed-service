@@ -73,7 +73,7 @@ public class JwtFilter extends OncePerRequestFilter {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         try {
-            String json = "";
+            String json;
             if (ex instanceof WantedException e) {
                 json = new ObjectMapper().writeValueAsString(ErrorResponse.of(e.getErrorType()));
             } else {
