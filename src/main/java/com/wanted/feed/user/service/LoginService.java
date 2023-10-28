@@ -19,7 +19,8 @@ public class LoginService {
     @Value("${jwt.secret}")
     private String secretKey;
 
-    public Long expiredMs = 1000 * 60 * 60L;
+    @Value("${jwt.expired-ms}")
+    public Long expiredMs;
 
     public User getAuthenticatedByLogin (LoginRequestDto loginRequestDto) {
         return userRepository.findByUsernameAndPassword(loginRequestDto.getUsername(),
