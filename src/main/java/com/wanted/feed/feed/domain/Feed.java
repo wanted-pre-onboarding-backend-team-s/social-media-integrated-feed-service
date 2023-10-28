@@ -35,4 +35,12 @@ public class Feed {
         this.content = content;
         this.contentId = contentId;
     }
+
+    public String getType() {
+        return type;
+    }
+
+    public String getContentId() {
+        return contentId;
+    }
 }

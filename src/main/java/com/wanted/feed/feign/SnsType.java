@@ -14,7 +14,7 @@ public enum SnsType {
     FACEBOOK("facebook", FacebookClient.class);
 
     private final String snsType;
-    private final Class<? extends SocialMediaClient> classType;
+    private final Class<? extends SnsClient> classType;
 
     public static SnsType findType(String snsType) {
         return Arrays.stream(SnsType.values())

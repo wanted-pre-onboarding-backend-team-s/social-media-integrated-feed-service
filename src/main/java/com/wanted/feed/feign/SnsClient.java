@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 
-public interface SocialMediaClient {
+public interface SnsClient {
 
     @PutMapping("/likes/{contentId}")
     default ResponseEntity<String> likeFeed(@PathVariable String contentId) {

@@ -2,7 +2,7 @@ package com.wanted.feed.feign.config;
 
 import com.wanted.feed.feign.FacebookClient;
 import com.wanted.feed.feign.InstagramClient;
-import com.wanted.feed.feign.SocialMediaClient;
+import com.wanted.feed.feign.SnsClient;
 import com.wanted.feed.feign.ThreadsClient;
 import com.wanted.feed.feign.TwitterClient;
 import java.util.Arrays;
@@ -27,7 +27,7 @@ public class SocialMediaClientConfig {
     }
 
     @Bean
-    public List<SocialMediaClient> clients() {
+    public List<SnsClient> clients() {
         return Arrays.asList(facebookClient, instagramClient, threadsClient, twitterClient);
     }
 }
