@@ -13,10 +13,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatusCode;
 
 @SpringBootTest
-class SocialMediaClientTest {
+class SnsClientTest {
 
     @Autowired
-    List<SocialMediaClient> clients;
+    List<SnsClient> clients;
 
     @Test
     @DisplayName("외부로 나가는 모든 SNS 좋아요 요청 응답의 상태값은 200")
@@ -31,7 +31,7 @@ class SocialMediaClientTest {
     @Test
     @DisplayName("외부 SNS 좋아요 요청 시 contentId 가 Null 이면 예외를 던진다.")
     void throwExceptionWhenContentIdIsNull() {
-        for (SocialMediaClient client : clients) {
+        for (SnsClient client : clients) {
             assertThatThrownBy(() -> client.likeFeed(null))
                     .isInstanceOf(SnsContentIdNotNullException.class);
         }
