@@ -37,4 +37,12 @@ public class Feed {
         this.viewCount = 0;
         this.contentId = contentId;
     }
+
+    public String getType() {
+        return type;
+    }
+
+    public String getContentId() {
+        return contentId;
+    }
 }
