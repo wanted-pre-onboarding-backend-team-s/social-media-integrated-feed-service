@@ -1,5 +1,6 @@
 package com.wanted.feed.exception;
 
+import com.wanted.feed.exception.client.SnsShareFeedFailException;
 import com.wanted.feed.feed.exception.FeedNotFoundException;
 import com.wanted.feed.exception.client.SnsContentIdNotNullException;
 import com.wanted.feed.exception.client.SnsLikeFeedFailException;
@@ -36,6 +37,8 @@ public enum ErrorType {
             HttpStatus.INTERNAL_SERVER_ERROR),
 
     S003("S003", "외부 SNS 서비스의 문제가 발생하였습니다.", SnsLikeFeedFailException.class,
+            HttpStatus.INTERNAL_SERVER_ERROR),
+    S004("S004", "외부 SNS 서비스의 문제가 발생하였습니다.", SnsShareFeedFailException.class,
             HttpStatus.INTERNAL_SERVER_ERROR),
 
     H001("H001", "FeedId는 Null 이 될 수 없습니다.", ShareFeedIdNotNullException.class,
