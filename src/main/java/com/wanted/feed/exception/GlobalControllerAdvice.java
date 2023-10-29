@@ -37,8 +37,10 @@ public class GlobalControllerAdvice {
     @ExceptionHandler(WantedException.class)
     protected ResponseEntity<ErrorResponse> handleWantedException(WantedException e) {
         ErrorType errorType = e.getErrorType();
-        log.info("[error] type: {}, sts: {}, msg: {}", errorType.getClassType().getSimpleName(), errorType.getHttpStatus(), errorType.getMessage());
-        return ResponseEntity.status(e.getErrorType().getHttpStatus()).body(ErrorResponse.of(e.getErrorType()));
+        log.info("[error] type: {}, sts: {}, msg: {}", errorType.getClassType().getSimpleName(),
+                errorType.getHttpStatus(), errorType.getMessage());
+        return ResponseEntity.status(e.getErrorType().getHttpStatus())
+                .body(ErrorResponse.of(e.getErrorType()));
     }
 
     private String getMessage(MethodArgumentNotValidException e) {
