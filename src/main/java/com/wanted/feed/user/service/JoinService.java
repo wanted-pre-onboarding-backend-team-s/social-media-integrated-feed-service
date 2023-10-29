@@ -9,11 +9,8 @@ import com.wanted.feed.user.dto.ApprovalRequestDto;
 import com.wanted.feed.user.dto.JoinRequestDto;
 import com.wanted.feed.user.dto.JoinResponseDto;
 import com.wanted.feed.user.exception.DuplicateUserException;
-import com.wanted.feed.user.exception.MismatchAuthCodeException;
-import com.wanted.feed.user.exception.MismatchPasswordException;
 import com.wanted.feed.user.exception.NotFoundAuthCodeException;
 import com.wanted.feed.user.exception.NotFoundUserException;
-import com.wanted.feed.user.exception.ApprovedUserException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Random;
@@ -49,32 +46,18 @@ public class JoinService {
         User user = userRepository.findByUsername(username)
                                   .orElseThrow(NotFoundUserException::new);
 
-        checkApproval(user);
-        checkPassword(approvalRequestDto.getPassword(), user);
+        user.checkApproval();
+        user.checkPasswordMatches(approvalRequestDto.getPassword(), passwordEncoder);
         checkAuthCode(approvalRequestDto.getCode(), username);
 
         user.approveUser();
-    }
-
-    private void checkApproval(User user) {
-        if(user.isApproved()) {
-            throw new ApprovedUserException();
-        }
-    }
-
-    private void checkPassword(String confirmPassword, User user) {
-        if (!passwordEncoder.matches(confirmPassword, user.getPassword())) {
-            throw new MismatchPasswordException();
-        }
     }
 
     private void checkAuthCode(String confirmCode, String username) {
         AuthCode authCode = authCodeRepository.findTopByUsernameOrderByCreatedAtDesc(username)
                                               .orElseThrow(NotFoundAuthCodeException::new);
 
-        if (!authCode.getCode().equals(confirmCode)) {
-            throw new MismatchAuthCodeException();
-        }
+        authCode.checkAuthCodeMatches(confirmCode);
     }
 
     private void validateDuplicateUsername(String username) {
