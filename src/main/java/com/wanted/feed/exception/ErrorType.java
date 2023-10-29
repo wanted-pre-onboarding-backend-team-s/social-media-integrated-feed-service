@@ -5,6 +5,7 @@ import com.wanted.feed.exception.client.SnsLikeFeedFailException;
 import com.wanted.feed.exception.client.SnsNotSupportException;
 import com.wanted.feed.exception.feed.like.LikeFeedIdNotNullException;
 import com.wanted.feed.exception.feed.like.LikeUserIdNotNullException;
+import com.wanted.feed.user.exception.DuplicateUserException;
 import java.util.Arrays;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -27,7 +28,9 @@ public enum ErrorType {
             HttpStatus.INTERNAL_SERVER_ERROR),
 
     S003("S003", "외부 SNS 서비스의 문제가 발생하였습니다.", SnsLikeFeedFailException.class,
-            HttpStatus.INTERNAL_SERVER_ERROR);
+            HttpStatus.INTERNAL_SERVER_ERROR),
+
+    J001("J001", "중복된 계정입니다.", DuplicateUserException.class, HttpStatus.CONFLICT);
 
     private final String code;
     private final String message;
@@ -37,8 +40,8 @@ public enum ErrorType {
 
     public static ErrorType of(Class<? extends WantedException> classType) {
         return errorTypes.stream()
-                .filter(it -> it.classType.equals(classType))
-                .findFirst()
-                .orElseThrow(RuntimeException::new);
+                         .filter(it -> it.classType.equals(classType))
+                         .findFirst()
+                         .orElseThrow(RuntimeException::new);
     }
 }
