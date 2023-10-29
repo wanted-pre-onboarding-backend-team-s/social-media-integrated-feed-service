@@ -78,13 +78,13 @@ class JoinServiceTest {
         User user = new User(REQUEST_USERNAME, REQUEST_EMAIL, REQUEST_PASSWORD);
         AuthCode code = new AuthCode(REQUEST_AUTHCODE, REQUEST_USERNAME);
 
-        when(userRepository.findByUsernameAndApproved(any(String.class), any(Boolean.class))).thenReturn(Optional.of(user));
+        when(userRepository.findByUsername(any(String.class))).thenReturn(Optional.of(user));
         when(passwordEncoder.matches(any(String.class), any(String.class))).thenReturn(true);
         when(authCodeRepository.findTopByUsernameOrderByCreatedAtDesc(any(String.class))).thenReturn(Optional.of(code));
 
         joinService.approve(request);
 
-        verify(userRepository, times(1)).findByUsernameAndApproved(any(String.class), any(Boolean.class));
+        verify(userRepository, times(1)).findByUsername(any(String.class));
         verify(passwordEncoder, times(1)).matches(any(String.class), any(String.class));
         verify(authCodeRepository, times(1)).findTopByUsernameOrderByCreatedAtDesc(any(String.class));
     }
@@ -94,7 +94,7 @@ class JoinServiceTest {
     void not_found_username_approve_fail() {
         ApprovalRequestDto request = new ApprovalRequestDto(REQUEST_USERNAME, REQUEST_PASSWORD, REQUEST_AUTHCODE);
 
-        when(userRepository.findByUsernameAndApproved(any(String.class), any(Boolean.class))).thenReturn(Optional.empty());
+        when(userRepository.findByUsername(any(String.class))).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> joinService.approve(request)).isInstanceOf(NotFoundUserException.class);
     }
@@ -105,10 +105,9 @@ class JoinServiceTest {
         ApprovalRequestDto request = new ApprovalRequestDto(REQUEST_USERNAME, REQUEST_PASSWORD, REQUEST_AUTHCODE);
         User user = new User(REQUEST_USERNAME, REQUEST_EMAIL, REQUEST_PASSWORD);
 
-        when(userRepository.findByUsernameAndApproved(any(String.class), any(Boolean.class))).thenReturn(Optional.of(user));
+        when(userRepository.findByUsername(any(String.class))).thenReturn(Optional.of(user));
         when(passwordEncoder.matches(any(String.class), any(String.class))).thenReturn(false);
 
         assertThatThrownBy(() -> joinService.approve(request)).isInstanceOf(MismatchPasswordException.class);
     }
-
 }
