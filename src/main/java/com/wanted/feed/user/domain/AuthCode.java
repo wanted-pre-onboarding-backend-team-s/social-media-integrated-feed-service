@@ -1,5 +1,6 @@
 package com.wanted.feed.user.domain;
 
+import com.wanted.feed.user.exception.MismatchAuthCodeException;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
@@ -33,5 +34,11 @@ public class AuthCode {
     public AuthCode(String code, String username) {
         this.code = code;
         this.username = username;
+    }
+
+    public void checkAuthCodeMatches(String code) {
+        if (!this.getCode().equals(code)) {
+            throw new MismatchAuthCodeException();
+        }
     }
 }
