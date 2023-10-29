@@ -41,4 +41,12 @@ public class Feed extends BaseTimeEntity {
         this.viewCount++;
     }
 
+    public String getType() {
+        return type;
+    }
+
+    public String getContentId() {
+        return contentId;
+    }
+
 }
