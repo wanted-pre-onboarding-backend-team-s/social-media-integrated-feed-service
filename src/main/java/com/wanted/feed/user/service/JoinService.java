@@ -12,7 +12,8 @@ import com.wanted.feed.user.exception.DuplicateUserException;
 import com.wanted.feed.user.exception.MismatchAuthCodeException;
 import com.wanted.feed.user.exception.MismatchPasswordException;
 import com.wanted.feed.user.exception.NotFoundAuthCodeException;
-import com.wanted.feed.user.exception.NotFoundUsernameException;
+import com.wanted.feed.user.exception.NotFoundUserException;
+import com.wanted.feed.user.exception.ApprovedUserException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Random;
@@ -45,13 +46,20 @@ public class JoinService {
     @Transactional
     public void approve(ApprovalRequestDto approvalRequestDto) {
         String username = approvalRequestDto.getUsername();
-        User user = userRepository.findByUsernameAndApproved(username, false)
-                                  .orElseThrow(NotFoundUsernameException::new);
+        User user = userRepository.findByUsername(username)
+                                  .orElseThrow(NotFoundUserException::new);
 
+        checkApproval(user);
         checkPassword(approvalRequestDto.getPassword(), user);
         checkAuthCode(approvalRequestDto.getCode(), username);
 
         user.approveUser();
+    }
+
+    private void checkApproval(User user) {
+        if(user.isApproved()) {
+            throw new ApprovedUserException();
+        }
     }
 
     private void checkPassword(String confirmPassword, User user) {

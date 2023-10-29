@@ -16,7 +16,7 @@ import com.wanted.feed.user.dto.JoinRequestDto;
 import com.wanted.feed.user.dto.JoinResponseDto;
 import com.wanted.feed.user.exception.DuplicateUserException;
 import com.wanted.feed.user.exception.MismatchPasswordException;
-import com.wanted.feed.user.exception.NotFoundUsernameException;
+import com.wanted.feed.user.exception.NotFoundUserException;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -96,7 +96,7 @@ class JoinServiceTest {
 
         when(userRepository.findByUsernameAndApproved(any(String.class), any(Boolean.class))).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> joinService.approve(request)).isInstanceOf(NotFoundUsernameException.class);
+        assertThatThrownBy(() -> joinService.approve(request)).isInstanceOf(NotFoundUserException.class);
     }
 
     @DisplayName("계정에 대한 비밀번호가 맞지 않을때 가입승인 실패")
