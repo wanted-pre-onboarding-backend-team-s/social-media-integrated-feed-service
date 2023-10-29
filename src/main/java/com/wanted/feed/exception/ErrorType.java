@@ -1,6 +1,7 @@
 package com.wanted.feed.exception;
 
 import com.wanted.feed.exception.client.SnsContentIdNotNullException;
+import com.wanted.feed.exception.client.SnsLikeFeedFailException;
 import com.wanted.feed.exception.client.SnsNotSupportException;
 import com.wanted.feed.exception.feed.like.LikeFeedIdNotNullException;
 import com.wanted.feed.exception.feed.like.LikeUserIdNotNullException;
@@ -23,6 +24,9 @@ public enum ErrorType {
     S001("S001", "지원하지 않는 소셜미디어 피드 입니다.", SnsNotSupportException.class,
             HttpStatus.INTERNAL_SERVER_ERROR),
     S002("S002", "contendId 는 필수 입니다.", SnsContentIdNotNullException.class,
+            HttpStatus.INTERNAL_SERVER_ERROR),
+
+    S003("S003", "외부 SNS 서비스의 문제가 발생하였습니다.", SnsLikeFeedFailException.class,
             HttpStatus.INTERNAL_SERVER_ERROR);
 
     private final String code;
