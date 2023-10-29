@@ -26,17 +26,20 @@ public class JwtFilter extends OncePerRequestFilter {
 
     private final UserRepository userRepository;
     private final String secretKey;
+    private static final String TOKEN_START_CHARACTERS = "Bearer ";
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
         final String authorization = request.getHeader(HttpHeaders.AUTHORIZATION);
 
-        if(authorization == null) {
+        if (authorization == null) {
             log.error("[NullTokenException] ex");
             handleJwtException(response, new NullTokenException());
             return;
-        } else if (!authorization.startsWith("Bearer ")) {
+        }
+
+        if (!authorization.startsWith(TOKEN_START_CHARACTERS)) {
             log.error("[InvalidTypeOfTokenException] ex");
             handleJwtException(response, new InvalidTypeOfTokenException());
             return;

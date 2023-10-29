@@ -22,13 +22,13 @@ public class LoginService {
     @Value("${jwt.expired-ms}")
     public Long expiredMs;
 
+    @Transactional(readOnly = true)
     public User getAuthenticatedByLogin (LoginRequestDto loginRequestDto) {
         return userRepository.findByUsernameAndPassword(loginRequestDto.getUsername(),
                 loginRequestDto.getPassword()).orElseThrow(NotFoundUserException::new);
     }
 
-    @Transactional
-    public String getLoginAuthorization (LoginRequestDto loginRequestDto) {
-        return TokenProvider.createJwt(getAuthenticatedByLogin(loginRequestDto).getId(), secretKey, expiredMs);
+    public String getLoginAuthorization (User user) {
+        return TokenProvider.createJwt(user.getId(), secretKey, expiredMs);
     }
 }

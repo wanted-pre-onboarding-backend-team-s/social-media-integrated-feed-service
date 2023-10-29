@@ -1,5 +1,6 @@
 package com.wanted.feed.exception;
 
+import java.util.StringJoiner;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,21 +42,13 @@ public class GlobalControllerAdvice {
     }
 
     private String getMessage(MethodArgumentNotValidException e) {
-        StringBuilder stringBuilder = new StringBuilder();
-        boolean isFirst = true;
+
+        StringJoiner joiner = new StringJoiner(", ");
 
         for (FieldError fieldError : e.getBindingResult().getFieldErrors()) {
-            if (!isFirst) {
-                stringBuilder.append(", ");
-            } else {
-                isFirst = false;
-            }
-
-            stringBuilder.append("[");
-            stringBuilder.append(fieldError.getField());
-            stringBuilder.append("]은(는) ");
-            stringBuilder.append(fieldError.getDefaultMessage());
+            String message = "[" + fieldError.getField() + "]은(는) " + fieldError.getDefaultMessage();
+            joiner.add(message);
         }
-        return stringBuilder.toString();
+        return joiner.toString();
     }
 }

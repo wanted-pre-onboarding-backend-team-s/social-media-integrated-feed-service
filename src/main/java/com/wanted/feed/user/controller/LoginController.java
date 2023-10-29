@@ -29,6 +29,6 @@ public class LoginController {
     @PostMapping("/login")
     public ResponseEntity<ApiResponse> login(@Validated @RequestBody LoginRequestDto loginRequestDto) {
         return ResponseEntity.created(URI.create("/feeds"))
-                .body(new ApiResponse(HttpStatus.CREATED.value(), loginService.getLoginAuthorization(loginRequestDto)));
+                .body(new ApiResponse(HttpStatus.CREATED.value(), loginService.getLoginAuthorization(loginService.getAuthenticatedByLogin(loginRequestDto))));
     }
 }
