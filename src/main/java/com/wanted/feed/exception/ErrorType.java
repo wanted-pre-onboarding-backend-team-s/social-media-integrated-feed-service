@@ -1,5 +1,6 @@
 package com.wanted.feed.exception;
 
+import com.wanted.feed.feed.exception.FeedNotFoundException;
 import com.wanted.feed.exception.client.SnsContentIdNotNullException;
 import com.wanted.feed.exception.client.SnsLikeFeedFailException;
 import com.wanted.feed.exception.client.SnsNotSupportException;
@@ -15,8 +16,13 @@ import org.springframework.http.HttpStatus;
 @Getter
 @AllArgsConstructor
 public enum ErrorType {
+  
     U001("U001", "에러 메시지를 담습니다.", WantedException.class, HttpStatus.NOT_FOUND),
-
+  
+    J001("J001", "중복된 계정입니다.", DuplicateUserException.class, HttpStatus.CONFLICT),
+  
+    F001("F001", "피드가 존재하지 않습니다.", FeedNotFoundException.class, HttpStatus.NOT_FOUND);
+  
     L001("L001", "FeedId는 Null 이 될 수 없습니다.", LikeFeedIdNotNullException.class,
             HttpStatus.INTERNAL_SERVER_ERROR),
     L002("L002", "UserId는 Null 이 될 수 없습니다.", LikeUserIdNotNullException.class,
@@ -31,7 +37,7 @@ public enum ErrorType {
             HttpStatus.INTERNAL_SERVER_ERROR),
 
     J001("J001", "중복된 계정입니다.", DuplicateUserException.class, HttpStatus.CONFLICT);
-
+  
     private final String code;
     private final String message;
     private final Class<? extends WantedException> classType;
@@ -40,8 +46,9 @@ public enum ErrorType {
 
     public static ErrorType of(Class<? extends WantedException> classType) {
         return errorTypes.stream()
-                         .filter(it -> it.classType.equals(classType))
-                         .findFirst()
-                         .orElseThrow(RuntimeException::new);
+            .filter(it -> it.classType.equals(classType))
+            .findFirst()
+            .orElseThrow(RuntimeException::new);
     }
+  
 }
