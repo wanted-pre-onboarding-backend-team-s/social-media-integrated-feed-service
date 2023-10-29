@@ -21,7 +21,7 @@ public enum ErrorType {
   
     J001("J001", "중복된 계정입니다.", DuplicateUserException.class, HttpStatus.CONFLICT),
   
-    F001("F001", "피드가 존재하지 않습니다.", FeedNotFoundException.class, HttpStatus.NOT_FOUND);
+    F001("F001", "피드가 존재하지 않습니다.", FeedNotFoundException.class, HttpStatus.NOT_FOUND),
   
     L001("L001", "FeedId는 Null 이 될 수 없습니다.", LikeFeedIdNotNullException.class,
             HttpStatus.INTERNAL_SERVER_ERROR),
@@ -34,9 +34,7 @@ public enum ErrorType {
             HttpStatus.INTERNAL_SERVER_ERROR),
 
     S003("S003", "외부 SNS 서비스의 문제가 발생하였습니다.", SnsLikeFeedFailException.class,
-            HttpStatus.INTERNAL_SERVER_ERROR),
-
-    J001("J001", "중복된 계정입니다.", DuplicateUserException.class, HttpStatus.CONFLICT);
+            HttpStatus.INTERNAL_SERVER_ERROR);
   
     private final String code;
     private final String message;
