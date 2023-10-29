@@ -1,4 +1,4 @@
-package com.wanted.feed.common.config.swagger;
+package com.wanted.feed.common.config.security;
 
 import com.wanted.feed.common.JwtFilter;
 import com.wanted.feed.user.domain.UserRepository;

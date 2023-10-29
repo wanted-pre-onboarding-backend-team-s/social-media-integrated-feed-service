@@ -34,11 +34,11 @@ public class JwtFilter extends OncePerRequestFilter {
 
         if(authorization == null) {
             log.error("[NullTokenException] ex");
-            jwtExceptionHandler(response, new NullTokenException());
+            handleJwtException(response, new NullTokenException());
             return;
         } else if (!authorization.startsWith("Bearer ")) {
             log.error("[InvalidTypeOfTokenException] ex");
-            jwtExceptionHandler(response, new InvalidTypeOfTokenException());
+            handleJwtException(response, new InvalidTypeOfTokenException());
             return;
         }
 
@@ -48,11 +48,11 @@ public class JwtFilter extends OncePerRequestFilter {
             TokenProvider.verifyToken(token, secretKey);
         } catch (ExpiredJwtException e) {
             log.error("[ExpiredJwtException] ex", e);
-            jwtExceptionHandler(response, e);
+            handleJwtException(response, e);
             return;
         } catch (Exception e) {
             log.error("[" + e.getClass().getSimpleName() + "] ex", e);
-            jwtExceptionHandler(response, new InvalidTokenException());
+            handleJwtException(response, new InvalidTokenException());
             return;
         }
 
@@ -60,7 +60,7 @@ public class JwtFilter extends OncePerRequestFilter {
         log.debug("userId = {}", userId);
         if (!userRepository.existsById(userId)) {
             log.error("[NotFoundUserException] ex");
-            jwtExceptionHandler(response, new InvalidTokenException());
+            handleJwtException(response, new InvalidTokenException());
             return;
         }
 
@@ -68,7 +68,7 @@ public class JwtFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    private void jwtExceptionHandler(HttpServletResponse response, Exception ex) {
+    private void handleJwtException(HttpServletResponse response, Exception ex) {
         response.setStatus(HttpStatus.BAD_REQUEST.value());
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
