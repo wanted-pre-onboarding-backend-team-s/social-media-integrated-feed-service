@@ -24,7 +24,7 @@ public class FeedDetailResponseDto {
 
     @Builder
     public FeedDetailResponseDto(List<String> hashtag, String type, String title, String content,
-        int viewCount, int likeCount, int shareCount, String contentId) {
+            int viewCount, int likeCount, int shareCount, String contentId) {
         this.hashtag = hashtag;
         this.type = type;
         this.title = title;
@@ -39,20 +39,20 @@ public class FeedDetailResponseDto {
         List<String> hashtags = toHashtags(hashtagList);
 
         return FeedDetailResponseDto.builder()
-            .hashtag(hashtags)
-            .type(feed.getType())
-            .content(feed.getContent())
-            .viewCount(feed.getViewCount())
-            .likeCount(feed.getLikeCount())
-            .shareCount(feed.getShareCount())
-            .contentId(feed.getContentId())
-            .build();
+                .hashtag(hashtags)
+                .type(feed.getType())
+                .title(feed.getTitle())
+                .content(feed.getContent())
+                .viewCount(feed.getViewCount())
+                .likeCount(feed.getLikeCount())
+                .shareCount(feed.getShareCount())
+                .contentId(feed.getContentId())
+                .build();
     }
 
     private static List<String> toHashtags(List<Hashtag> hashtagList) {
         return hashtagList.stream()
-            .map(Hashtag::getName)
-            .collect(Collectors.toList());
+                .map(Hashtag::getName)
+                .collect(Collectors.toList());
     }
-
 }
