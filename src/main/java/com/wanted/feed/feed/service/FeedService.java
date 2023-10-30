@@ -11,6 +11,7 @@ import com.wanted.feed.feed.dto.FeedResponseDto;
 import com.wanted.feed.feed.dto.SearchFeedRequestDto;
 import com.wanted.feed.feed.exception.FeedNotFoundException;
 import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -49,7 +50,11 @@ public class FeedService {
 
         Page<Feed> feedListBySearch = feedRepository.findFeedListBySearch(
             searchFeedRequest, pageRequest);
-        return FeedResponseDto.pagedListOf(pagination, feedListBySearch);
+
+        Map<Long, List<Hashtag>> hashtagsMap = hashtagRepository.findHashtagMapByFeeds(
+            feedListBySearch.toList()
+        );
+        return FeedResponseDto.pagedListOf(pagination, feedListBySearch, hashtagsMap);
     }
 
 }
