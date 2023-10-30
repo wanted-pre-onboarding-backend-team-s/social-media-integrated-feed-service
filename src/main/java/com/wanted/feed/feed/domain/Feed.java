@@ -25,8 +25,6 @@ public class Feed extends BaseTimeEntity {
     @Lob
     private String content;
     private int viewCount;
-    private int shareCount;
-    private int likeCount;
     private String contentId;
 
     @Builder
@@ -36,18 +34,12 @@ public class Feed extends BaseTimeEntity {
         this.title = title;
         this.content = content;
         this.viewCount = 0;
-        this.shareCount = 0;
-        this.likeCount = 0;
         this.contentId = contentId;
     }
 
     public void updateViews() {
         this.viewCount++;
     }
-
-    public void updateShares() {this.shareCount++;}
-
-    public void updateLikes() {this.likeCount++;}
 
     public String getType() {
         return type;
