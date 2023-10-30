@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/wanted?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: wanted_user
+    password: wanted123
+
+jwt:
+  secret: 8c50792324c94a589541366364ea4de5f3d6d2c2b2a44eecb99439ce23653ad2
+  expired-ms: 3600000 # 60*60*1000
+
+logging:
+  level:
+    org.hibernate.SQL: debug
