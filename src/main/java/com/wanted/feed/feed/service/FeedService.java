@@ -4,10 +4,13 @@ import com.wanted.feed.common.response.PagedResponse;
 import com.wanted.feed.common.response.Pagination;
 import com.wanted.feed.feed.domain.Feed;
 import com.wanted.feed.feed.domain.FeedRepository;
+import com.wanted.feed.feed.domain.Hashtag;
+import com.wanted.feed.feed.domain.HashtagRepository;
 import com.wanted.feed.feed.dto.FeedDetailResponseDto;
 import com.wanted.feed.feed.dto.FeedResponseDto;
 import com.wanted.feed.feed.dto.SearchFeedRequestDto;
 import com.wanted.feed.feed.exception.FeedNotFoundException;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,12 +23,15 @@ public class FeedService {
 
     private final FeedRepository feedRepository;
 
+    private final HashtagRepository hashtagRepository;
+
     @Transactional
     public FeedDetailResponseDto findFeedDetail(Long id) {
         Feed feed = findFeedById(id);
 
+        List<Hashtag> hashtagList = hashtagRepository.findHashTagsByFeedId(id);
         feed.updateViews();
-        return FeedDetailResponseDto.of(feed);
+        return FeedDetailResponseDto.of(feed, hashtagList);
     }
 
     @Transactional(readOnly = true)

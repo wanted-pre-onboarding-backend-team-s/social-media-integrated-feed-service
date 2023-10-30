@@ -34,7 +34,6 @@ public class FeedRepositoryImpl implements FeedRepositoryCustom {
     @Override
     public Page<Feed> findFeedListBySearch(SearchFeedRequestDto filter,
         Pageable pageable) {
-
         List<Feed> contents = jpaQueryFactory
             .selectFrom(feed)
             .where(

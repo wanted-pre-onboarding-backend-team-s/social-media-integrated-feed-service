@@ -4,7 +4,6 @@ import com.wanted.feed.common.response.PagedResponse;
 import com.wanted.feed.common.response.Pagination;
 import com.wanted.feed.feed.domain.Feed;
 import java.util.List;
-import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,6 +21,8 @@ public class FeedResponseDto {
     private String title;
     private String content;
     private int viewCount;
+    private int likeCount;
+    private int shareCount;
     private String contentId;
 
     public static FeedResponseDto of(Feed feed) {
@@ -32,14 +33,10 @@ public class FeedResponseDto {
             feed.getTitle(),
             shortContent,
             feed.getViewCount(),
+            feed.getLikeCount(),
+            feed.getShareCount(),
             feed.getContentId()
         );
-    }
-
-    public static List<FeedResponseDto> listOf(List<Feed> feeds) {
-        return feeds.stream()
-            .map(FeedResponseDto::of)
-            .collect(Collectors.toList());
     }
 
     public static PagedResponse<FeedResponseDto> pagedListOf(Pagination pagination,
