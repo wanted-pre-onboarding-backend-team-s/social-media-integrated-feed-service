@@ -11,7 +11,7 @@ public interface FacebookClient extends SnsClient {
     default ResponseEntity<ClientShareResponseDto> shareFeed(String contentId) {
         this.verificationNullContentId(contentId);
         return ResponseEntity.ok(ClientShareResponseDto.builder()
-                .feedUrl("https://www.facebook.com/" + contentId)
+                .feedUrl("https://www.facebook.com/feeds/" + contentId)
                 .build());
     }
 }

@@ -11,7 +11,7 @@ public interface InstagramClient extends SnsClient {
     default ResponseEntity<ClientShareResponseDto> shareFeed(String contentId) {
         this.verificationNullContentId(contentId);
         return ResponseEntity.ok(ClientShareResponseDto.builder()
-                .feedUrl("https://www.instagram.com/" + contentId)
+                .feedUrl("https://www.instagram.com/feeds/" + contentId)
                 .build());
     }
 }

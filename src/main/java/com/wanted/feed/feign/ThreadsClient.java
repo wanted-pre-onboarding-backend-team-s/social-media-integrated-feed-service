@@ -11,7 +11,7 @@ public interface ThreadsClient extends SnsClient {
     default ResponseEntity<ClientShareResponseDto> shareFeed(String contentId) {
         this.verificationNullContentId(contentId);
         return ResponseEntity.ok(ClientShareResponseDto.builder()
-                .feedUrl("https://www.threads.com/" + contentId)
+                .feedUrl("https://www.threads.com/feeds/" + contentId)
                 .build());
     }
 }
