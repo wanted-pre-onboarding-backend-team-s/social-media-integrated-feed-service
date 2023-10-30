@@ -2,6 +2,7 @@ package com.wanted.feed.user.service;
 
 import com.wanted.feed.common.response.JwtResponse;
 import com.wanted.feed.common.util.TokenProvider;
+import com.wanted.feed.user.exception.MismatchPasswordException;
 import com.wanted.feed.user.exception.NotFoundUserException;
 import com.wanted.feed.user.domain.User;
 import com.wanted.feed.user.domain.UserRepository;
@@ -33,7 +34,7 @@ public class LoginService {
         String encryptedPassword = user.getPassword();
 
         if (!passwordEncoder.matches(loginRequestDto.getPassword(), encryptedPassword)) {
-            throw new NotFoundUserException();
+            throw new MismatchPasswordException();
         }
         return user;
     }
