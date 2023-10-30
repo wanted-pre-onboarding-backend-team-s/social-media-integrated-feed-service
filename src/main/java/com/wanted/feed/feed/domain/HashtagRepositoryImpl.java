@@ -43,5 +43,4 @@ public class HashtagRepositoryImpl implements HashtagRepositoryCustom {
     private List<Long> getFeedIds(List<Feed> feeds) {
         return feeds.stream().map(Feed::getId).toList();
     }
-
 }
