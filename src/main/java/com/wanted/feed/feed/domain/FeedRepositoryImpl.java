@@ -18,6 +18,7 @@ import com.wanted.feed.feed.domain.enums.FeedOrderByType;
 import com.wanted.feed.feed.domain.enums.FeedSearchByType;
 import com.wanted.feed.feed.domain.enums.SortDirectionType;
 import com.wanted.feed.feed.dto.SearchFeedRequestDto;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -128,4 +129,19 @@ public class FeedRepositoryImpl implements FeedRepositoryCustom {
         return feed.id.in(subQuery);
     }
 
+    @Override
+    public List<Feed> findAllByHashtagAndCreatedAtBetweenStartAndEnd(
+            String hashtagGiven, LocalDateTime start, LocalDateTime end
+    ) {
+
+        return jpaQueryFactory
+                .select(feed)
+                .from(feedToHashtag)
+                .innerJoin(feed).on(feed.id.eq(feedToHashtag.feedId))
+                .innerJoin(hashtag).on(hashtag.id.eq(feedToHashtag.hashtagId))
+                .where(hashtag.name.eq(hashtagGiven)
+                        .and(feed.createdAt.between(start, end)))
+                .orderBy(feed.createdAt.asc())
+                .fetch();
+    }
 }
