@@ -91,6 +91,10 @@ public class FeedRepositoryImpl implements FeedRepositoryCustom {
     }
 
     private BooleanExpression searchEq(String search, FeedSearchByType searchBy) {
+        if (StringUtils.isNullOrEmpty(search)) {
+            return Expressions.TRUE;
+        }
+
         return switch (searchBy) {
             case TITLE -> feed.title.contains(search);
             case CONTENT -> feed.content.contains(search);
