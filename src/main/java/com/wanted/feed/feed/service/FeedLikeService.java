@@ -61,4 +61,5 @@ public class FeedLikeService {
         return feedRepository.findById(feedId)
                 .orElseThrow();
     }
+
 }
