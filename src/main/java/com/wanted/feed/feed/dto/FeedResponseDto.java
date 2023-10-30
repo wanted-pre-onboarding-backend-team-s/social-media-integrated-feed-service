@@ -4,6 +4,7 @@ import com.wanted.feed.common.response.PagedResponse;
 import com.wanted.feed.common.response.Pagination;
 import com.wanted.feed.feed.domain.Feed;
 import com.wanted.feed.feed.domain.Hashtag;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -48,8 +49,10 @@ public class FeedResponseDto {
     public static PagedResponse<FeedResponseDto> pagedListOf(Pagination pagination,
         Page<Feed> feeds, Map<Long, List<Hashtag>> hashtagsMap) {
         List<FeedResponseDto> feedResponseDtoList = feeds.stream()
-            .map(feed -> FeedResponseDto.of(feed, hashtagsMap.get(feed.getId())))
-            .toList();
+            .map(feed -> FeedResponseDto.of(
+                feed,
+                hashtagsMap.getOrDefault(feed.getId(), Collections.emptyList())
+            )).toList();
 
         pagination.setTotalCount(feeds.getTotalElements());
         pagination.setTotalPages(feeds.getTotalPages());
