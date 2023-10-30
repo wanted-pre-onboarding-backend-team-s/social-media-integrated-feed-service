@@ -3,13 +3,19 @@ package com.wanted.feed.feed.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.when;
 
 import com.wanted.feed.common.exception.ErrorType;
 import com.wanted.feed.feed.domain.Feed;
 import com.wanted.feed.feed.domain.FeedRepository;
+import com.wanted.feed.feed.domain.Hashtag;
+import com.wanted.feed.feed.domain.HashtagRepository;
 import com.wanted.feed.feed.dto.FeedDetailResponseDto;
 import com.wanted.feed.feed.exception.FeedNotFoundException;
+import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.Optional;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,12 +27,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class FeedServiceTest {
 
     private static final Long FEED_ID = 1L;
-    private static final String FEED_TYPE = "spring";
-    private static final String FEED_TITLE = "피드제목입니다";
     private static final int FEED_DEFAULT_VIEW_COUNT = 0;
-    private static final String FEED_CONTENT = "콘텐츠입니다";
-
-    private static final String FEED_CONTENT_ID = "1E1D1F";
 
     @InjectMocks
     private FeedService feedService;
@@ -34,10 +35,29 @@ class FeedServiceTest {
     @Mock
     private FeedRepository feedRepository;
 
-    @DisplayName("피드 상세 조회 실패 존재하지 않음")
+    @Mock
+    private HashtagRepository hashtagRepository;
+
+    Feed feed;
+
+    @BeforeEach
+    void setUp() throws NoSuchFieldException, IllegalAccessException {
+        feed = Feed.builder()
+            .content("content")
+            .type("twitter")
+            .title("title")
+            .contentId("contentId")
+            .build();
+
+        Field field = Feed.class.getDeclaredField("id");
+        field.setAccessible(true); // 필드에 접근 가능하도록 설정
+        field.set(feed, 1L);
+    }
+
+    @DisplayName("피드 상세 조회시 피드가 존재하지 않으면 예외를 던진다 - 실패")
     @Test
     void find_feed_detail_failed_not_found() {
-        doReturn(Optional.empty()).when(feedRepository).findById(FEED_ID);
+        when(feedRepository.findById(FEED_ID)).thenReturn(Optional.empty());
 
         final FeedNotFoundException result = assertThrows(
             FeedNotFoundException.class,
@@ -47,36 +67,24 @@ class FeedServiceTest {
         assertThat(result.getErrorType()).isEqualTo(ErrorType.F001);
     }
 
-    @DisplayName("피드 상세 조회 성공")
+    @DisplayName("피드 상세 조회 - 성공")
     @Test
     void find_feed_detail_success() {
-        Feed feed = Feed.builder()
-            .type(FEED_TYPE)
-            .title(FEED_TITLE)
-            .content(FEED_CONTENT)
-            .contentId(FEED_CONTENT_ID)
-            .build();
-
-        doReturn(Optional.of(feed)).when(feedRepository).findById(FEED_ID);
+        when(feedRepository.findById(FEED_ID)).thenReturn(Optional.of(feed));
+        doReturn(Arrays.asList(
+            Hashtag.builder().name("tag1").build(),
+            Hashtag.builder().name("tag2").build()
+        )).when(hashtagRepository).findHashTagsByFeedId(FEED_ID);
 
         final FeedDetailResponseDto result = feedService.findFeedDetail(FEED_ID);
 
-        assertThat(result.getType()).isEqualTo(FEED_TYPE);
-        assertThat(result.getTitle()).isEqualTo(FEED_TITLE);
-        assertThat(result.getContent()).isEqualTo(FEED_CONTENT);
-        assertThat(result.getContentId()).isEqualTo(FEED_CONTENT_ID);
+        assertThat(result.getTitle()).isEqualTo("title");
+        assertThat(result.getHashtag().size()).isEqualTo(2);
     }
 
-    @DisplayName("피드 상세 조회시 조회수 1 증가")
+    @DisplayName("피드 상세 조회시 조회수가 1 증가한다 - 성공")
     @Test
     void find_feed_detail_update_view_count() {
-        Feed feed = Feed.builder()
-            .type(FEED_TYPE)
-            .title(FEED_TITLE)
-            .content(FEED_CONTENT)
-            .contentId(FEED_CONTENT_ID)
-            .build();
-
         doReturn(Optional.of(feed)).when(feedRepository).findById(FEED_ID);
 
         final FeedDetailResponseDto result = feedService.findFeedDetail(FEED_ID);

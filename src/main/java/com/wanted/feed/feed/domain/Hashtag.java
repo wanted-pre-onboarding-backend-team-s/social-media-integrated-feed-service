@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -21,4 +22,10 @@ public class Hashtag {
 
     @Column(name = "name")
     private String name;
+
+    @Builder
+    public Hashtag(String name) {
+        this.name = name;
+    }
+
 }
