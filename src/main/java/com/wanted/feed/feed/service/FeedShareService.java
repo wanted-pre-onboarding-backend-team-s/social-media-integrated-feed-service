@@ -41,9 +41,14 @@ public class FeedShareService {
             throw new SnsShareFeedFailException();
         }
 
+        feed.updateShares();
+        saveShare(userId, feedId);
+        return FeedShareResponseDto.of(clientResponse.getBody());
+    }
+
+    private void saveShare(long userId, long feedId) {
         Share share = createShare(userId, feedId);
         shareRepository.save(share);
-        return FeedShareResponseDto.of(clientResponse.getBody());
     }
 
     private static Share createShare(long userId, long feedId) {
