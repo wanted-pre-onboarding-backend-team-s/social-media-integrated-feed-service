@@ -38,19 +38,19 @@ public class FeedRepositoryImpl implements FeedRepositoryCustom {
             .selectFrom(feed)
             .where(
                 hashTagEq(filter.getHashtag()),
-                searchEq(filter.getSearch(), filter.getSearch_by()),
+                searchEq(filter.getSearch(), filter.getSearchBy()),
                 typeEq(filter.getType())
             )
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
-            .orderBy(getOrderBy(filter.getOrder_by(), filter.getSort_direction()))
+            .orderBy(getOrderBy(filter.getOrderBy(), filter.getSortDirection()))
             .fetch();
 
         JPAQuery<Feed> countQuery = jpaQueryFactory
             .selectFrom(feed)
             .where(
                 hashTagEq(filter.getHashtag()),
-                searchEq(filter.getSearch(), filter.getSearch_by()),
+                searchEq(filter.getSearch(), filter.getSearchBy()),
                 typeEq(filter.getType())
             );
 

@@ -45,7 +45,7 @@ public class FeedService {
     public PagedResponse<FeedResponseDto> findFeedsBySearch(
         SearchFeedRequestDto searchFeedRequest) {
         Pagination pagination = Pagination.create(searchFeedRequest.getPage(),
-            searchFeedRequest.getPage_count());
+            searchFeedRequest.getPageCount());
         PageRequest pageRequest = pagination.toPageRequest();
 
         Page<Feed> feedListBySearch = feedRepository.findFeedListBySearch(
