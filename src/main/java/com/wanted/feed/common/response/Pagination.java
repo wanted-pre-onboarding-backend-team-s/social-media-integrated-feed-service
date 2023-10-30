@@ -9,12 +9,14 @@ import org.springframework.data.domain.PageRequest;
 @NoArgsConstructor
 public class Pagination {
 
+    private static final int DEFAULT_PAGE = 1;
+    private static final int DEFAULT_SIZE = 10;
+    private static final int MIN_SIZE = 100;
+    private static final int MAX_SIZE = 100;
+
     private Integer page;
-
     private Integer size;
-
     private Long totalCount;
-
     private Integer totalPages;
 
     public static Pagination create(Integer page, Integer size) {
@@ -25,16 +27,16 @@ public class Pagination {
     }
 
     private static Integer checkSize(Integer size) {
-        if (Objects.isNull(size) || size < 1 || size > 100) {
-            return 10;
+        if (Objects.isNull(size) || size < MIN_SIZE || size > MAX_SIZE) {
+            return DEFAULT_SIZE;
         }
 
         return size;
     }
 
     private static Integer checkPage(Integer page) {
-        if (Objects.isNull(page) || page < 1) {
-            return 1;
+        if (Objects.isNull(page) || page < MIN_SIZE) {
+            return DEFAULT_PAGE;
         }
 
         return page;
