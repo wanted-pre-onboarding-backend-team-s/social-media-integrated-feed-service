@@ -3,6 +3,7 @@ package com.wanted.feed.user.dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -20,4 +21,10 @@ public class LoginRequestDto {
     @NotBlank(message = "필수값 입니다")
     @Size(min = 10, message = "10글자 이상 입력해주세요")
     private String password;
+
+    @Builder
+    public LoginRequestDto(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
 }
