@@ -18,6 +18,7 @@ import com.wanted.feed.feed.domain.enums.FeedOrderByType;
 import com.wanted.feed.feed.domain.enums.FeedSearchByType;
 import com.wanted.feed.feed.domain.enums.SortDirectionType;
 import com.wanted.feed.feed.dto.SearchFeedRequestDto;
+import com.wanted.feed.user.domain.User;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -32,12 +33,12 @@ public class FeedRepositoryImpl implements FeedRepositoryCustom {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public Page<Feed> findFeedListBySearch(SearchFeedRequestDto filter,
+    public Page<Feed> findFeedListBySearch(User loginUser, SearchFeedRequestDto filter,
         Pageable pageable) {
         List<Feed> contents = jpaQueryFactory
             .selectFrom(feed)
             .where(
-                hashTagEq(filter.getHashtag()),
+                hashTagEq(loginUser, filter.getHashtag()),
                 searchEq(filter.getSearch(), filter.getSearchBy()),
                 typeEq(filter.getType())
             )
@@ -49,7 +50,7 @@ public class FeedRepositoryImpl implements FeedRepositoryCustom {
         JPAQuery<Feed> countQuery = jpaQueryFactory
             .selectFrom(feed)
             .where(
-                hashTagEq(filter.getHashtag()),
+                hashTagEq(loginUser, filter.getHashtag()),
                 searchEq(filter.getSearch(), filter.getSearchBy()),
                 typeEq(filter.getType())
             );
@@ -114,16 +115,14 @@ public class FeedRepositoryImpl implements FeedRepositoryCustom {
         return feed.type.eq(type);
     }
 
-    private BooleanExpression hashTagEq(String hashTag) {
-        // TODO::hashTag를 사용자명으로 진행
-        if (StringUtils.isNullOrEmpty(hashTag)) {
-            return Expressions.TRUE;
-        }
+    private BooleanExpression hashTagEq(User loginUser, String hashTag) {
+        String searchHashTag =
+            StringUtils.isNullOrEmpty(hashTag) ? loginUser.getUsername() : hashTag;
 
         JPQLQuery<Long> subQuery = JPAExpressions.select(feedToHashtag.feedId)
             .from(feedToHashtag)
             .innerJoin(hashtag).on(hashtag.id.eq(feedToHashtag.hashtagId))
-            .where(hashtag.name.eq(hashTag));
+            .where(hashtag.name.eq(searchHashTag));
 
         return feed.id.in(subQuery);
     }
