@@ -1,5 +1,6 @@
 package com.wanted.feed.feed.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
@@ -78,6 +79,7 @@ class FeedShareServiceTest {
         feedShareService.shareFeed(1L, 1L);
 
         // then
+        assertThat(feed.getShareCount()).isEqualTo(1L);
         verify(shareRepository, times(1)).save(any(Share.class));
     }
 
@@ -93,5 +95,6 @@ class FeedShareServiceTest {
         // when, then
         assertThatThrownBy(() -> feedShareService.shareFeed(1L, 1L))
                 .isInstanceOf(SnsShareFeedFailException.class);
+        assertThat(feed.getShareCount()).isEqualTo(0);
     }
 }
