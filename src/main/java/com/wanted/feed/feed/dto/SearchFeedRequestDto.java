@@ -26,7 +26,7 @@ public class SearchFeedRequestDto {
     @ValidEnum(enumClass = FeedSearchByType.class)
     private FeedSearchByType search_by;
 
-    @ValidEnum(enumClass = FeedSearchByType.class)
+    @ValidEnum(enumClass = SortDirectionType.class)
     private SortDirectionType sort_direction;
 
     private String search;
