@@ -5,13 +5,12 @@ import com.wanted.feed.feed.domain.Hashtag;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-@AllArgsConstructor(access = AccessLevel.PUBLIC)
 public class FeedDetailResponseDto {
 
     private List<String> hashtag;
@@ -23,19 +22,31 @@ public class FeedDetailResponseDto {
     private int shareCount;
     private String contentId;
 
+    @Builder
+    public FeedDetailResponseDto(List<String> hashtag, String type, String title, String content,
+        int viewCount, int likeCount, int shareCount, String contentId) {
+        this.hashtag = hashtag;
+        this.type = type;
+        this.title = title;
+        this.content = content;
+        this.viewCount = viewCount;
+        this.likeCount = likeCount;
+        this.shareCount = shareCount;
+        this.contentId = contentId;
+    }
+
     public static FeedDetailResponseDto of(Feed feed, List<Hashtag> hashtagList) {
         List<String> hashtags = toHashtags(hashtagList);
 
-        return new FeedDetailResponseDto(
-            hashtags,
-            feed.getType(),
-            feed.getTitle(),
-            feed.getContent(),
-            feed.getViewCount(),
-            feed.getLikeCount(),
-            feed.getShareCount(),
-            feed.getContentId()
-        );
+        return FeedDetailResponseDto.builder()
+            .hashtag(hashtags)
+            .type(feed.getType())
+            .content(feed.getContent())
+            .viewCount(feed.getViewCount())
+            .likeCount(feed.getLikeCount())
+            .shareCount(feed.getShareCount())
+            .contentId(feed.getContentId())
+            .build();
     }
 
     private static List<String> toHashtags(List<Hashtag> hashtagList) {

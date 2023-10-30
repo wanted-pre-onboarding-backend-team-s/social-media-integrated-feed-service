@@ -9,14 +9,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-@AllArgsConstructor(access = AccessLevel.PUBLIC)
 public class FeedResponseDto {
 
     private static final int MAX_CONTENT_LENGTH = 20;
@@ -30,20 +29,32 @@ public class FeedResponseDto {
     private int shareCount;
     private String contentId;
 
+    @Builder
+    public FeedResponseDto(List<String> hashtag, String type, String title, String content,
+        int viewCount, int likeCount, int shareCount, String contentId) {
+        this.hashtag = hashtag;
+        this.type = type;
+        this.title = title;
+        this.content = content;
+        this.viewCount = viewCount;
+        this.likeCount = likeCount;
+        this.shareCount = shareCount;
+        this.contentId = contentId;
+    }
+
     public static FeedResponseDto of(Feed feed, List<Hashtag> hashtagList) {
         List<String> hashtags = toHashtags(hashtagList);
         String shortContent = toShortContent(feed.getContent());
 
-        return new FeedResponseDto(
-            hashtags,
-            feed.getType(),
-            feed.getTitle(),
-            shortContent,
-            feed.getViewCount(),
-            feed.getLikeCount(),
-            feed.getShareCount(),
-            feed.getContentId()
-        );
+        return FeedResponseDto.builder()
+            .hashtag(hashtags)
+            .type(feed.getType())
+            .content(shortContent)
+            .viewCount(feed.getViewCount())
+            .likeCount(feed.getLikeCount())
+            .shareCount(feed.getShareCount())
+            .contentId(feed.getContentId())
+            .build();
     }
 
     public static PagedResponse<FeedResponseDto> pagedListOf(Pagination pagination,
