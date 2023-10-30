@@ -25,6 +25,8 @@ public class Feed extends BaseTimeEntity {
     @Lob
     private String content;
     private int viewCount;
+    private int likeCount;
+    private int shareCount;
     private String contentId;
 
     @Builder
