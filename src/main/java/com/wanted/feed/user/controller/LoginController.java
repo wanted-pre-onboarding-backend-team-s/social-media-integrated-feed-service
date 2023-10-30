@@ -25,10 +25,13 @@ public class LoginController {
 
     private final LoginService loginService;
 
-    @Operation(summary = "로그인 요청", description = "로그인 인증, 인가")
+    @Operation(summary = "로그인 요청", description = "로그인 인증, 토큰 발급")
     @PostMapping("/login")
-    public ResponseEntity<ApiResponse> login(@Validated @RequestBody LoginRequestDto loginRequestDto) {
+    public ResponseEntity<ApiResponse> login(
+            @Validated @RequestBody LoginRequestDto loginRequestDto) {
         return ResponseEntity.created(URI.create("/feeds"))
-                .body(new ApiResponse(HttpStatus.CREATED.value(), loginService.getLoginAuthorization(loginService.getAuthenticatedByLogin(loginRequestDto))));
+                .body(new ApiResponse(HttpStatus.CREATED.value(),
+                        loginService.getLoginAuthorization(
+                                loginService.getAuthenticatedByLogin(loginRequestDto))));
     }
 }

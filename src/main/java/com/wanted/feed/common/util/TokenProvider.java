@@ -1,5 +1,6 @@
 package com.wanted.feed.common.util;
 
+import com.wanted.feed.common.response.JwtResponse;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -22,17 +23,24 @@ public class TokenProvider {
         return Jwts.parserBuilder().setSigningKey(getSigningKey(secretKey)).build().parseClaimsJws(token);
     }
 
-    public static String createJwt(Long userId, String secretKey, Long expiredMs) {
+    public static JwtResponse createJwt(Long userId, String secretKey, Long expiredMs) {
+
+        Date issuedTime = new Date(System.currentTimeMillis());
+        Date expiredTime = new Date(System.currentTimeMillis() + expiredMs);
 
         Claims claims = Jwts.claims();
         claims.put("userId", userId);
 
-        return Jwts.builder()
-                .setClaims(claims)
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + expiredMs))
-                .signWith(getSigningKey(secretKey), SIGNATURE_ALGORITHM)
-                .compact();
+        return JwtResponse.builder()
+                .token(Jwts.builder()
+                        .setClaims(claims)
+                        .setIssuedAt(issuedTime)
+                        .setExpiration(expiredTime)
+                        .signWith(getSigningKey(secretKey), SIGNATURE_ALGORITHM)
+                        .compact())
+                .issuedTime(String.valueOf(issuedTime))
+                .expiredTime(String.valueOf(expiredTime))
+                .build();
     }
 
     private static SecretKeySpec getSigningKey(String secretKey) {

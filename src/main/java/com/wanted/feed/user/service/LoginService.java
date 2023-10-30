@@ -1,5 +1,6 @@
 package com.wanted.feed.user.service;
 
+import com.wanted.feed.common.response.JwtResponse;
 import com.wanted.feed.common.util.TokenProvider;
 import com.wanted.feed.user.exception.NotFoundUserException;
 import com.wanted.feed.user.domain.User;
@@ -28,7 +29,7 @@ public class LoginService {
                 loginRequestDto.getPassword()).orElseThrow(NotFoundUserException::new);
     }
 
-    public String getLoginAuthorization (User user) {
+    public JwtResponse getLoginAuthorization (User user) {
         return TokenProvider.createJwt(user.getId(), secretKey, expiredMs);
     }
 }
