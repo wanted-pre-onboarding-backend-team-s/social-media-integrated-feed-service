@@ -57,6 +57,7 @@ class LoginServiceTest {
         Assertions.assertThat(userId).isEqualTo(user.getId());
     }
 
+    @Test
     @DisplayName("JWT 발급 에러 - 잘못된 아이디")
     void invalidId() {
         LoginRequestDto loginRequestDto = LoginRequestDto.builder()
@@ -67,6 +68,7 @@ class LoginServiceTest {
                 .isInstanceOf(NotFoundUserException.class);
     }
 
+    @Test
     @DisplayName("JWT 발급 에러 - 잘못된 패스워드")
     void invalidPassword() {
         LoginRequestDto loginRequestDto = LoginRequestDto.builder()
