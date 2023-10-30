@@ -33,7 +33,7 @@ public class FeedController {
         return ApiResponse.toResponse(feedService.findFeedsBySearch(searchFeedRequest));
     }
 
-    // TODO:: 피드 상세조회시 HashTag 및 likeCount, shareConnt 추가
+    // TODO:: 피드 상세조회시 HashTag 및 likeCount, shareCount 추가
     @Operation(summary = "피드 상세 조회")
     @GetMapping("/detail/{id}")
     public ApiResponse<FeedDetailResponseDto> findFeedDetail(
