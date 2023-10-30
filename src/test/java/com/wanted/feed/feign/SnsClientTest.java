@@ -4,7 +4,7 @@ package com.wanted.feed.feign;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.wanted.feed.exception.client.SnsContentIdNotNullException;
+import com.wanted.feed.feign.exception.SnsContentIdNotNullException;
 import com.wanted.feed.feign.dto.response.ClientShareResponseDto;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;

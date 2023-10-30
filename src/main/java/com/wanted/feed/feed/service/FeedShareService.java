@@ -1,6 +1,6 @@
 package com.wanted.feed.feed.service;
 
-import com.wanted.feed.exception.client.SnsShareFeedFailException;
+import com.wanted.feed.feign.exception.SnsShareFeedFailException;
 import com.wanted.feed.feed.domain.Feed;
 import com.wanted.feed.feed.domain.FeedRepository;
 import com.wanted.feed.feed.domain.Share;

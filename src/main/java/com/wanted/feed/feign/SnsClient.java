@@ -1,6 +1,6 @@
 package com.wanted.feed.feign;
 
-import com.wanted.feed.exception.client.SnsContentIdNotNullException;
+import com.wanted.feed.feign.exception.SnsContentIdNotNullException;
 import com.wanted.feed.feign.dto.response.ClientShareResponseDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;

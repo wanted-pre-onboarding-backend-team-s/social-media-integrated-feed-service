@@ -1,6 +1,6 @@
 package com.wanted.feed.user.service;
 
-import com.wanted.feed.exception.WantedException;
+import com.wanted.feed.common.exception.WantedException;
 import com.wanted.feed.user.domain.AuthCode;
 import com.wanted.feed.user.domain.AuthCodeRepository;
 import com.wanted.feed.user.domain.User;

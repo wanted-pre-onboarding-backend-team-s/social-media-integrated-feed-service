@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doReturn;
 
-import com.wanted.feed.exception.ErrorType;
+import com.wanted.feed.common.exception.ErrorType;
 import com.wanted.feed.feed.domain.Feed;
 import com.wanted.feed.feed.domain.FeedRepository;
 import com.wanted.feed.feed.dto.FeedDetailResponseDto;

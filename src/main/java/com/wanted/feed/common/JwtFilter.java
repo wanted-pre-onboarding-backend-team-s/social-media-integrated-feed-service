@@ -2,14 +2,9 @@ package com.wanted.feed.common;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wanted.feed.common.util.TokenProvider;
-import com.wanted.feed.exception.ErrorResponse;
-import com.wanted.feed.exception.ErrorType;
-import com.wanted.feed.exception.WantedException;
+import com.wanted.feed.common.exception.ErrorResponse;
+import com.wanted.feed.common.exception.ErrorType;
 import com.wanted.feed.user.domain.UserRepository;
-import com.wanted.feed.user.exception.ExpiredTokenException;
-import com.wanted.feed.user.exception.InvalidTokenException;
-import com.wanted.feed.user.exception.InvalidTypeOfTokenException;
-import com.wanted.feed.user.exception.NullTokenException;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

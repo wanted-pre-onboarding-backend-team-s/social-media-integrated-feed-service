@@ -1,13 +1,13 @@
-package com.wanted.feed.exception;
+package com.wanted.feed.common.exception;
 
-import com.wanted.feed.exception.client.SnsShareFeedFailException;
+import com.wanted.feed.feign.exception.SnsShareFeedFailException;
 import com.wanted.feed.feed.exception.FeedNotFoundException;
 import com.wanted.feed.user.exception.ApprovedUserException;
-import com.wanted.feed.exception.client.SnsContentIdNotNullException;
-import com.wanted.feed.exception.client.SnsLikeFeedFailException;
-import com.wanted.feed.exception.client.SnsNotSupportException;
-import com.wanted.feed.exception.feed.like.LikeFeedIdNotNullException;
-import com.wanted.feed.exception.feed.like.LikeUserIdNotNullException;
+import com.wanted.feed.feign.exception.SnsContentIdNotNullException;
+import com.wanted.feed.feign.exception.SnsLikeFeedFailException;
+import com.wanted.feed.feign.exception.SnsNotSupportException;
+import com.wanted.feed.feed.exception.like.LikeFeedIdNotNullException;
+import com.wanted.feed.feed.exception.like.LikeUserIdNotNullException;
 import com.wanted.feed.feed.exception.share.ShareFeedIdNotNullException;
 import com.wanted.feed.feed.exception.share.ShareUserIdNotNullException;
 import com.wanted.feed.user.exception.DuplicateUserException;
