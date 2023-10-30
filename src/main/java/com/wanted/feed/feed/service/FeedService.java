@@ -1,10 +1,16 @@
 package com.wanted.feed.feed.service;
 
+import com.wanted.feed.common.response.PagedResponse;
+import com.wanted.feed.common.response.Pagination;
 import com.wanted.feed.feed.domain.Feed;
 import com.wanted.feed.feed.domain.FeedRepository;
 import com.wanted.feed.feed.dto.FeedDetailResponseDto;
+import com.wanted.feed.feed.dto.FeedResponseDto;
+import com.wanted.feed.feed.dto.SearchFeedRequestDto;
 import com.wanted.feed.feed.exception.FeedNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +32,18 @@ public class FeedService {
     public Feed findFeedById(Long id) {
         return feedRepository.findById(id)
             .orElseThrow(FeedNotFoundException::new);
+    }
+
+    // TODO::hashTag 값 없을 시 본인계정 값으로 업데이트
+    public PagedResponse<FeedResponseDto> findFeedsBySearch(
+        SearchFeedRequestDto searchFeedRequest) {
+        Pagination pagination = Pagination.create(searchFeedRequest.getPage(),
+            searchFeedRequest.getPage_count());
+        PageRequest pageRequest = pagination.toPageRequest();
+
+        Page<Feed> feedListBySearch = feedRepository.findFeedListBySearch(
+            searchFeedRequest, pageRequest);
+        return FeedResponseDto.pagedListOf(pagination, feedListBySearch);
     }
 
 }
