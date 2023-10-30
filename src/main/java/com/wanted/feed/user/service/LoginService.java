@@ -8,6 +8,7 @@ import com.wanted.feed.user.domain.UserRepository;
 import com.wanted.feed.user.dto.LoginRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class LoginService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Value("${jwt.secret}")
     private String secretKey;
@@ -25,8 +27,15 @@ public class LoginService {
 
     @Transactional(readOnly = true)
     public User getAuthenticatedByLogin (LoginRequestDto loginRequestDto) {
-        return userRepository.findByUsernameAndPassword(loginRequestDto.getUsername(),
-                loginRequestDto.getPassword()).orElseThrow(NotFoundUserException::new);
+
+        User user = userRepository.findByUsername(loginRequestDto.getUsername())
+                .orElseThrow(NotFoundUserException::new);
+        String encryptedPassword = user.getPassword();
+
+        if (!passwordEncoder.matches(loginRequestDto.getPassword(), encryptedPassword)) {
+            throw new NotFoundUserException();
+        }
+        return user;
     }
 
     public JwtResponse getLoginAuthorization (User user) {
