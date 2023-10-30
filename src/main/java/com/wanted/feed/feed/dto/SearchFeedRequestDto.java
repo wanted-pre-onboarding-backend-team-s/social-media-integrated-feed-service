@@ -1,5 +1,6 @@
 package com.wanted.feed.feed.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.wanted.feed.common.validator.ValidEnum;
 import com.wanted.feed.feed.domain.enums.FeedOrderByType;
 import com.wanted.feed.feed.domain.enums.FeedSearchByType;
@@ -21,17 +22,21 @@ public class SearchFeedRequestDto {
     private String type;
 
     @ValidEnum(enumClass = FeedOrderByType.class)
-    private FeedOrderByType order_by;
+    @JsonProperty("order_by")
+    private FeedOrderByType orderBy;
 
     @ValidEnum(enumClass = FeedSearchByType.class)
-    private FeedSearchByType search_by;
+    @JsonProperty("search_by")
+    private FeedSearchByType searchBy;
 
     @ValidEnum(enumClass = SortDirectionType.class)
-    private SortDirectionType sort_direction;
+    @JsonProperty("sort_direction")
+    private SortDirectionType sortDirection;
 
     private String search;
 
-    private Integer page_count;
+    @JsonProperty("page_count")
+    private Integer pageCount;
 
     private Integer page;
 
