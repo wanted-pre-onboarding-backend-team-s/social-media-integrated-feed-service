@@ -14,6 +14,7 @@ import com.wanted.feed.user.exception.DuplicateUserException;
 import com.wanted.feed.user.exception.ExpiredTokenException;
 import com.wanted.feed.user.exception.InvalidTokenException;
 import com.wanted.feed.user.exception.InvalidTypeOfTokenException;
+import com.wanted.feed.user.exception.NotFoundUserException;
 import com.wanted.feed.user.exception.NullTokenException;
 import com.wanted.feed.user.exception.MismatchAuthCodeException;
 import com.wanted.feed.user.exception.MismatchPasswordException;
@@ -28,6 +29,7 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 public enum ErrorType {
 
+    U001("U001", "계정을 찾을 수 없습니다.", NotFoundUserException.class, HttpStatus.BAD_REQUEST),
     U002("U002", "중복된 계정입니다.", DuplicateUserException.class, HttpStatus.CONFLICT),
     U003("U003", "잘못된 비밀번호입니다.", MismatchPasswordException.class, HttpStatus.NOT_FOUND),
     U004("U004", "아직 인증코드를 받지 않으셨습니다.", NotFoundAuthCodeException.class, HttpStatus.NOT_FOUND),
