@@ -15,6 +15,7 @@ import com.wanted.feed.feed.exception.DateRangeExceeds30Days;
 import com.wanted.feed.feed.exception.DateRangeExceeds7Days;
 import com.wanted.feed.feed.exception.FeedNotFoundException;
 import com.wanted.feed.feed.exception.StartIsAfterEndException;
+import com.wanted.feed.user.domain.User;
 import com.wanted.feed.user.domain.UserRepository;
 import com.wanted.feed.user.exception.NotFoundUserException;
 import java.time.LocalDate;
@@ -40,8 +41,9 @@ public class FeedService {
     private static final LocalTime ZERO_O_CLOCK = LocalTime.of(0, 0, 0);
     private static final LocalTime BEFORE_THE_HOUR = LocalTime.of(23, 59, 59);
 
-    private final FeedRepository feedRepository;
     private final UserRepository userRepository;
+
+    private final FeedRepository feedRepository;
 
     private final HashtagRepository hashtagRepository;
 
@@ -60,14 +62,16 @@ public class FeedService {
                 .orElseThrow(FeedNotFoundException::new);
     }
 
-    // TODO::hashTag 값 없을 시 본인계정 값으로 업데이트
     public PagedResponse<FeedResponseDto> findFeedsBySearch(
-            SearchFeedRequestDto searchFeedRequest) {
+            Long userId, SearchFeedRequestDto searchFeedRequest) {
+        User loginUser = userRepository.findById(userId).orElseThrow(
+                NotFoundUserException::new);
+
         Pagination pagination = Pagination.create(searchFeedRequest.getPage(),
                 searchFeedRequest.getPageCount());
         PageRequest pageRequest = pagination.toPageRequest();
 
-        Page<Feed> feedListBySearch = feedRepository.findFeedListBySearch(
+        Page<Feed> feedListBySearch = feedRepository.findFeedListBySearch(loginUser,
                 searchFeedRequest, pageRequest);
 
         Map<Long, List<Hashtag>> hashtagsMap = hashtagRepository.findHashtagMapByFeeds(

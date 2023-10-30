@@ -14,6 +14,7 @@ import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,9 +29,10 @@ public class FeedController {
     @Operation(summary = "피드 목록 조회")
     @GetMapping("/filter")
     public ApiResponse<PagedResponse<FeedResponseDto>> findFeedsBySearch(
+        @RequestAttribute("userId") Long userId,
         @Valid @ParameterObject @ModelAttribute SearchFeedRequestDto searchFeedRequest
     ) {
-        return ApiResponse.toResponse(feedService.findFeedsBySearch(searchFeedRequest));
+        return ApiResponse.toResponse(feedService.findFeedsBySearch(userId, searchFeedRequest));
     }
 
     @Operation(summary = "피드 상세 조회")
