@@ -3,7 +3,7 @@ package com.wanted.feed.feign;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.wanted.feed.exception.client.SnsNotSupportException;
+import com.wanted.feed.feign.exception.SnsNotSupportException;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

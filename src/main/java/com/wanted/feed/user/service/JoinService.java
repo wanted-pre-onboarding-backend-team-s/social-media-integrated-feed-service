@@ -1,13 +1,16 @@
 package com.wanted.feed.user.service;
 
-import com.wanted.feed.exception.WantedException;
+import com.wanted.feed.common.exception.WantedException;
 import com.wanted.feed.user.domain.AuthCode;
 import com.wanted.feed.user.domain.AuthCodeRepository;
 import com.wanted.feed.user.domain.User;
 import com.wanted.feed.user.domain.UserRepository;
+import com.wanted.feed.user.dto.ApprovalRequestDto;
 import com.wanted.feed.user.dto.JoinRequestDto;
 import com.wanted.feed.user.dto.JoinResponseDto;
 import com.wanted.feed.user.exception.DuplicateUserException;
+import com.wanted.feed.user.exception.NotFoundAuthCodeException;
+import com.wanted.feed.user.exception.NotFoundUserException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Random;
@@ -35,6 +38,26 @@ public class JoinService {
         saveCode(joinRequest, randomCode);
 
         return new JoinResponseDto(user.getUsername(), randomCode);
+    }
+
+    @Transactional
+    public void approve(ApprovalRequestDto approvalRequestDto) {
+        String username = approvalRequestDto.getUsername();
+        User user = userRepository.findByUsername(username)
+                                  .orElseThrow(NotFoundUserException::new);
+
+        user.checkApproval();
+        user.checkPasswordMatches(approvalRequestDto.getPassword(), passwordEncoder);
+        checkAuthCode(approvalRequestDto.getCode(), username);
+
+        user.approveUser();
+    }
+
+    private void checkAuthCode(String confirmCode, String username) {
+        AuthCode authCode = authCodeRepository.findTopByUsernameOrderByCreatedAtDesc(username)
+                                              .orElseThrow(NotFoundAuthCodeException::new);
+
+        authCode.checkAuthCodeMatches(confirmCode);
     }
 
     private void validateDuplicateUsername(String username) {

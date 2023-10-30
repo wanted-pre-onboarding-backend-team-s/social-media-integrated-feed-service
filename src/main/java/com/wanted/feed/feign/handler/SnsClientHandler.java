@@ -1,6 +1,6 @@
 package com.wanted.feed.feign.handler;
 
-import com.wanted.feed.exception.client.SnsNotSupportException;
+import com.wanted.feed.feign.exception.SnsNotSupportException;
 import com.wanted.feed.feed.domain.Feed;
 import com.wanted.feed.feign.SnsType;
 import com.wanted.feed.feign.SnsClient;

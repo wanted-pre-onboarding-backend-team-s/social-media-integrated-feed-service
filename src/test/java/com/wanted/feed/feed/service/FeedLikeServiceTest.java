@@ -1,12 +1,13 @@
 package com.wanted.feed.feed.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.wanted.feed.exception.client.SnsLikeFeedFailException;
+import com.wanted.feed.feign.exception.SnsLikeFeedFailException;
 import com.wanted.feed.feed.domain.Feed;
 import com.wanted.feed.feed.domain.FeedRepository;
 import com.wanted.feed.feed.domain.Like;
@@ -69,6 +70,7 @@ class FeedLikeServiceTest {
         feedLikeService.sendFeedLike(1L, 1L);
 
         // then
+        assertThat(feed.getLikeCount()).isEqualTo(1L);
         verify(likeRepository, times(1)).save(any(Like.class));
     }
 
@@ -83,6 +85,7 @@ class FeedLikeServiceTest {
 
 
         // when, then
+        assertThat(feed.getLikeCount()).isEqualTo(0L);
         assertThatThrownBy(() -> feedLikeService.sendFeedLike(1L, 1L))
                 .isInstanceOf(SnsLikeFeedFailException.class);
     }

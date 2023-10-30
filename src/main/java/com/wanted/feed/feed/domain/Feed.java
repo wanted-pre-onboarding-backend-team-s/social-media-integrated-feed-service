@@ -36,11 +36,21 @@ public class Feed extends BaseTimeEntity {
         this.title = title;
         this.content = content;
         this.viewCount = 0;
+        this.likeCount = 0;
+        this.shareCount = 0;
         this.contentId = contentId;
     }
 
     public void updateViews() {
-        this.viewCount++;
+      this.viewCount++;
+    }
+  
+    public void updateLikes() {
+      this.likeCount++;
+    }
+  
+    public void updateShares() {
+      this.shareCount++;
     }
 
 }

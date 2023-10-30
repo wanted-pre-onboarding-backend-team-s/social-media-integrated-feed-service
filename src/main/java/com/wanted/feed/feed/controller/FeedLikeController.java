@@ -6,9 +6,11 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "feed-like", description = "피드 좋아요 API")
+@Tag(name = "피드")
 @RestController
 public class FeedLikeController {
 
@@ -18,10 +20,12 @@ public class FeedLikeController {
         this.feedLikeService = feedLikeService;
     }
 
-    @PostMapping("/feeds/{id}/like")
     @Operation(description = "피드 좋아요 요청")
-    public ApiResponse<Void> likeFeed(@PathVariable Long id) {
-        feedLikeService.sendFeedLike(1L, id);
+    @PostMapping("/feeds/{id}/like")
+    public ApiResponse<Void> likeFeed(
+            @RequestAttribute("userId") Long userId,
+            @PathVariable Long id) {
+        feedLikeService.sendFeedLike(userId, id);
         return ApiResponse.ok();
     }
 }

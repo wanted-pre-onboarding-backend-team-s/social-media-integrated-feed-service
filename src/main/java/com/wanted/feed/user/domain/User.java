@@ -1,5 +1,7 @@
 package com.wanted.feed.user.domain;
 
+import com.wanted.feed.user.exception.ApprovedUserException;
+import com.wanted.feed.user.exception.MismatchPasswordException;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -8,6 +10,7 @@ import jakarta.persistence.Table;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Entity
 @Getter
@@ -32,5 +35,21 @@ public class User {
 
     public void changePassword(String password) {
         this.password = password;
+    }
+
+    public void approveUser() {
+        this.approved = true;
+    }
+
+    public void checkApproval() {
+        if (this.isApproved()) {
+            throw new ApprovedUserException();
+        }
+    }
+
+    public void checkPasswordMatches(String password, PasswordEncoder passwordEncoder) {
+        if (!passwordEncoder.matches(password, this.getPassword())) {
+            throw new MismatchPasswordException();
+        }
     }
 }

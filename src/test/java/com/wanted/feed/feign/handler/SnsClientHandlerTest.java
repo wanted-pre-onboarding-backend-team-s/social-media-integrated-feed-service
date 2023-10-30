@@ -2,7 +2,7 @@ package com.wanted.feed.feign.handler;
 
 import static org.assertj.core.api.Assertions.*;
 
-import com.wanted.feed.exception.client.SnsNotSupportException;
+import com.wanted.feed.feign.exception.SnsNotSupportException;
 import com.wanted.feed.feed.domain.Feed;
 import com.wanted.feed.feign.SnsClient;
 import com.wanted.feed.feign.TwitterClient;
