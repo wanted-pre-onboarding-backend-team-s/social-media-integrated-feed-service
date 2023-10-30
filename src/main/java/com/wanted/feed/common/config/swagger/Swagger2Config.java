@@ -5,6 +5,7 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
+import java.util.Collections;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -18,19 +19,20 @@ public class Swagger2Config {
             .title("Feed API")
             .description("Feed API 명세서 입니다.");
 
-        String jwt = "JWT";
-        SecurityRequirement securityRequirement = new SecurityRequirement().addList(jwt);
-        Components components = new Components().addSecuritySchemes(jwt, new SecurityScheme()
-            .name(jwt)
-            .type(SecurityScheme.Type.APIKEY)
+        SecurityScheme securityScheme = new SecurityScheme()
+            .type(SecurityScheme.Type.HTTP)
+            .scheme("bearer")
+            .bearerFormat("JWT")
             .in(SecurityScheme.In.HEADER)
-            .name("token")
-        );
+            .name("Authorization")
+            .bearerFormat("Bearer {token}");
+
+        SecurityRequirement schemaRequirement = new SecurityRequirement().addList("bearerAuth");
 
         return new OpenAPI()
-            .info(info)
-            .addSecurityItem(securityRequirement)
-            .components(components);
+            .components(new Components().addSecuritySchemes("bearerAuth", securityScheme))
+            .security(Collections.singletonList(schemaRequirement))
+            .info(info);
     }
 
 }

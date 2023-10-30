@@ -13,11 +13,15 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 @SpringBootTest
 class LoginServiceTest {
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
     private UserRepository userRepository;
@@ -37,7 +41,7 @@ class LoginServiceTest {
 
         User saveUser = User.builder()
                 .username("user1")
-                .password("1234")
+                .password(passwordEncoder.encode("1234"))
                 .email("user1@wanted.com")
                 .build();
         this.user = userRepository.save(saveUser);
@@ -51,8 +55,8 @@ class LoginServiceTest {
                 .username("user1")
                 .password("1234")
                 .build();
-        JwtResponse jwtResponse = loginService.getLoginAuthorization(
-                loginService.getAuthenticatedByLogin(loginRequestDto));
+        User authenticatedByLogin = loginService.getAuthenticatedByLogin(loginRequestDto);
+        JwtResponse jwtResponse = loginService.getLoginAuthorization(authenticatedByLogin);
         Long userId = TokenProvider.getUserId(jwtResponse.getToken(), secretKey);
         Assertions.assertThat(userId).isEqualTo(user.getId());
     }
