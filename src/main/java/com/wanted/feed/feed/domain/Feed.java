@@ -49,15 +49,12 @@ public class Feed extends BaseTimeEntity {
         this.viewCount++;
     }
 
-    public void updateShares() {
-        this.shareCount++;
-    }
-
     public void updateLikes() {
         this.likeCount++;
     }
 
-    public String getType() {
-        return type;
+    public void updateShares() {
+        this.shareCount++;
     }
+  
 }

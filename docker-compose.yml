@@ -1,0 +1,16 @@
+version: "3.7"
+
+services:
+  db:
+    container_name: "wanted_dream_db"
+    image: mysql:8
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: wanted123
+      MYSQL_USER: wanted_user
+      MYSQL_PASSWORD: wanted123
+      MYSQL_DATABASE: wanted
+    volumes:
+      - ./db/init.sql:/docker-entrypoint-initdb.d
+    ports:
+      - "3306:3306"
