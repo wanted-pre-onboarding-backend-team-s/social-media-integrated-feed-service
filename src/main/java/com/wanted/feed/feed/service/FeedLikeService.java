@@ -31,10 +31,17 @@ public class FeedLikeService {
     public void sendFeedLike(Long userId, Long feedId) {
         Feed feed = findFeed(feedId);
         SnsClient client = snsClientHandler.getSnsClientByFeed(feed);
+
         ResponseEntity<String> response = client.likeFeed(feed.getContentId());
         if (isFail(response)) {
             throw new SnsLikeFeedFailException();
         }
+
+        feed.updateLikes();
+        saveLike(userId, feedId);
+    }
+
+    private void saveLike(Long userId, Long feedId) {
         Like like = createLike(userId, feedId);
         likeRepository.save(like);
     }
