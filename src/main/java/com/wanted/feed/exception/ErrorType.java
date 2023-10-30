@@ -7,10 +7,12 @@ import com.wanted.feed.exception.client.SnsNotSupportException;
 import com.wanted.feed.exception.feed.like.LikeFeedIdNotNullException;
 import com.wanted.feed.exception.feed.like.LikeUserIdNotNullException;
 import com.wanted.feed.user.exception.DuplicateUserException;
+import com.wanted.feed.user.exception.ExpiredTokenException;
 import com.wanted.feed.user.exception.InvalidTokenException;
 import com.wanted.feed.user.exception.InvalidTypeOfTokenException;
 import com.wanted.feed.user.exception.NotFoundUserException;
 import com.wanted.feed.user.exception.NullTokenException;
+import io.jsonwebtoken.ExpiredJwtException;
 import java.util.Arrays;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -30,9 +32,10 @@ public enum ErrorType {
     S002("S002", "contendId 는 필수 입니다.", SnsContentIdNotNullException.class, HttpStatus.INTERNAL_SERVER_ERROR),
     S003("S003", "외부 SNS 서비스의 문제가 발생하였습니다.", SnsLikeFeedFailException.class, HttpStatus.INTERNAL_SERVER_ERROR),
     U002("U002", "사용자를 찾을 수 없습니다.", NotFoundUserException.class, HttpStatus.BAD_REQUEST),
-    T001("T001", "유효하지 않은 토큰 타입 입니다.", InvalidTypeOfTokenException.class, HttpStatus.BAD_REQUEST),
-    T002("T002", "토큰이 입력되지 않았습니다.", NullTokenException.class, HttpStatus.BAD_REQUEST),
-    T003("T003", "유효하지 않은 토큰 입니다.", InvalidTokenException.class, HttpStatus.BAD_REQUEST);
+    T001("T001", "토큰이 입력되지 않았습니다.", NullTokenException.class, HttpStatus.BAD_REQUEST),
+    T002("T002", "유효하지 않은 토큰 타입 입니다.", InvalidTypeOfTokenException.class, HttpStatus.BAD_REQUEST),
+    T003("T003", "만료된 토큰 입니다.", ExpiredTokenException.class, HttpStatus.BAD_REQUEST),
+    T004("T004", "유효하지 않은 토큰 입니다.", InvalidTokenException.class, HttpStatus.BAD_REQUEST);
 
     private final String code;
     private final String message;

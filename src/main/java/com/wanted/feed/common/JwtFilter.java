@@ -3,8 +3,10 @@ package com.wanted.feed.common;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wanted.feed.common.util.TokenProvider;
 import com.wanted.feed.exception.ErrorResponse;
+import com.wanted.feed.exception.ErrorType;
 import com.wanted.feed.exception.WantedException;
 import com.wanted.feed.user.domain.UserRepository;
+import com.wanted.feed.user.exception.ExpiredTokenException;
 import com.wanted.feed.user.exception.InvalidTokenException;
 import com.wanted.feed.user.exception.InvalidTypeOfTokenException;
 import com.wanted.feed.user.exception.NullTokenException;
@@ -35,13 +37,13 @@ public class JwtFilter extends OncePerRequestFilter {
 
         if (authorization == null) {
             log.error("[NullTokenException] ex");
-            handleJwtException(response, new NullTokenException());
+            handleJwtException(response, ErrorType.T001);
             return;
         }
 
         if (!authorization.startsWith(TOKEN_START_CHARACTERS)) {
             log.error("[InvalidTypeOfTokenException] ex");
-            handleJwtException(response, new InvalidTypeOfTokenException());
+            handleJwtException(response, ErrorType.T002);
             return;
         }
 
@@ -51,11 +53,11 @@ public class JwtFilter extends OncePerRequestFilter {
             TokenProvider.verifyToken(token, secretKey);
         } catch (ExpiredJwtException e) {
             log.error("[ExpiredJwtException] ex", e);
-            handleJwtException(response, e);
+            handleJwtException(response, ErrorType.T003);
             return;
         } catch (Exception e) {
             log.error("[" + e.getClass().getSimpleName() + "] ex", e);
-            handleJwtException(response, new InvalidTokenException());
+            handleJwtException(response, ErrorType.T004);
             return;
         }
 
@@ -63,7 +65,7 @@ public class JwtFilter extends OncePerRequestFilter {
         log.debug("userId = {}", userId);
         if (!userRepository.existsById(userId)) {
             log.error("[NotFoundUserException] ex");
-            handleJwtException(response, new InvalidTokenException());
+            handleJwtException(response, ErrorType.T004);
             return;
         }
 
@@ -71,17 +73,12 @@ public class JwtFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    private void handleJwtException(HttpServletResponse response, Exception ex) {
+    private void handleJwtException(HttpServletResponse response, ErrorType errorType) {
         response.setStatus(HttpStatus.BAD_REQUEST.value());
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         try {
-            String json;
-            if (ex instanceof WantedException e) {
-                json = new ObjectMapper().writeValueAsString(ErrorResponse.of(e.getErrorType()));
-            } else {
-                json = new ObjectMapper().writeValueAsString(ErrorResponse.of("BAD_REQUEST", ex.getMessage()));
-            }
+            String json = new ObjectMapper().writeValueAsString(ErrorResponse.of(errorType));
             response.getOutputStream().write(json.getBytes());
         } catch (Exception e) {
             log.error(e.getMessage());
