@@ -67,7 +67,6 @@ public class FeedRepositoryImpl implements FeedRepositoryCustom {
 
         // orderByType이 Null일 경우 기본 정렬 값
         if (Objects.isNull(orderByType)) {
-            orderSpecifierList.add(new OrderSpecifier<>(Order.DESC, feed.viewCount).nullsLast());
             orderSpecifierList.add(new OrderSpecifier<>(Order.DESC, feed.createdAt).nullsLast());
             return orderSpecifierList.toArray(OrderSpecifier<?>[]::new);
         }
@@ -85,7 +84,6 @@ public class FeedRepositoryImpl implements FeedRepositoryCustom {
                 orderSpecifierList.add(new OrderSpecifier<>(order, feed.shareCount).nullsLast());
         }
 
-        orderSpecifierList.add(new OrderSpecifier<>(Order.DESC, feed.viewCount).nullsLast());
         orderSpecifierList.add(new OrderSpecifier<>(Order.DESC, feed.createdAt).nullsLast());
         return orderSpecifierList.toArray(OrderSpecifier<?>[]::new);
     }
@@ -93,6 +91,11 @@ public class FeedRepositoryImpl implements FeedRepositoryCustom {
     private BooleanExpression searchEq(String search, FeedSearchByType searchBy) {
         if (StringUtils.isNullOrEmpty(search)) {
             return Expressions.TRUE;
+        }
+
+        if (Objects.isNull(searchBy)) {
+            return feed.title.contains(search)
+                .or(feed.content.contains(search));
         }
 
         return switch (searchBy) {
