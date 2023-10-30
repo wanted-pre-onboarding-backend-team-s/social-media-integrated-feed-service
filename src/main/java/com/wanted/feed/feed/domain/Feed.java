@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
+import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,20 +25,23 @@ public class Feed extends BaseTimeEntity {
     private String title;
     @Lob
     private String content;
-    private int viewCount;
-    private int likeCount;
-    private int shareCount;
+    private Integer viewCount;
+    private Integer shareCount;
+    private Integer likeCount;
     private String contentId;
 
     @Builder
     public Feed(String type, String title, String content,
-        String contentId) {
+            Integer viewCount, Integer shareCount, Integer likeCount,
+            String contentId, LocalDateTime createdAt) {
+        super(createdAt);
+
         this.type = type;
         this.title = title;
         this.content = content;
-        this.viewCount = 0;
-        this.likeCount = 0;
-        this.shareCount = 0;
+        this.viewCount = viewCount != null ? viewCount : 0;
+        this.shareCount = shareCount != null ? shareCount : 0;
+        this.likeCount = likeCount != null ? likeCount : 0;
         this.contentId = contentId;
     }
 
@@ -52,5 +56,5 @@ public class Feed extends BaseTimeEntity {
     public void updateShares() {
         this.shareCount++;
     }
-
+  
 }

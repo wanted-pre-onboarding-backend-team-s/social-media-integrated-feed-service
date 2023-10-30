@@ -1,6 +1,8 @@
 package com.wanted.feed.common.exception;
 
 import com.wanted.feed.feign.exception.SnsShareFeedFailException;
+import com.wanted.feed.feed.exception.DateRangeExceeds30Days;
+import com.wanted.feed.feed.exception.DateRangeExceeds7Days;
 import com.wanted.feed.feed.exception.FeedNotFoundException;
 import com.wanted.feed.user.exception.ApprovedUserException;
 import com.wanted.feed.feign.exception.SnsContentIdNotNullException;
@@ -10,6 +12,12 @@ import com.wanted.feed.feed.exception.like.LikeFeedIdNotNullException;
 import com.wanted.feed.feed.exception.like.LikeUserIdNotNullException;
 import com.wanted.feed.feed.exception.share.ShareFeedIdNotNullException;
 import com.wanted.feed.feed.exception.share.ShareUserIdNotNullException;
+import com.wanted.feed.feed.exception.EndDateInvalidException;
+import com.wanted.feed.feed.exception.StartDateInvalidException;
+import com.wanted.feed.feed.exception.StartIsAfterEndException;
+import com.wanted.feed.feed.exception.TypeInvalidException;
+import com.wanted.feed.feed.exception.TypeNullException;
+import com.wanted.feed.feed.exception.ValueInvalidException;
 import com.wanted.feed.user.exception.DuplicateUserException;
 import com.wanted.feed.user.exception.ExpiredTokenException;
 import com.wanted.feed.user.exception.InvalidTokenException;
@@ -52,7 +60,16 @@ public enum ErrorType {
     T004("T004", "유효하지 않은 토큰 입니다.", InvalidTokenException.class, HttpStatus.BAD_REQUEST),
 
     H001("H001", "FeedId는 Null 이 될 수 없습니다.", ShareFeedIdNotNullException.class, HttpStatus.INTERNAL_SERVER_ERROR),
-    H002("H002", "UserId는 Null 이 될 수 없습니다.", ShareUserIdNotNullException.class, HttpStatus.INTERNAL_SERVER_ERROR);
+    H002("H002", "UserId는 Null 이 될 수 없습니다.", ShareUserIdNotNullException.class, HttpStatus.INTERNAL_SERVER_ERROR),
+
+    ST002("ST002", "타입이 포함되어야 합니다.", TypeNullException.class, HttpStatus.BAD_REQUEST),
+    ST003("ST003", "타입은 date, hour 중 하나여야 합니다.", TypeInvalidException.class, HttpStatus.BAD_REQUEST),
+    ST004("ST004", "시작일은 yyyy-mm-dd 형식이어야 합니다.", StartDateInvalidException.class, HttpStatus.BAD_REQUEST),
+    ST005("ST005", "종료일은 yyyy-mm-dd 형식이어야 합니다.", EndDateInvalidException.class, HttpStatus.BAD_REQUEST),
+    ST006("ST006", "올바르지 않은 결과요소가 포함되어 있습니다.", ValueInvalidException.class, HttpStatus.BAD_REQUEST),
+    ST007("ST007", "시작일이 종료일보다 앞섭니다.", StartIsAfterEndException.class, HttpStatus.BAD_REQUEST),
+    ST008("ST008", "조회일자 범위가 30일을 초과합니다.", DateRangeExceeds30Days.class, HttpStatus.BAD_REQUEST),
+    ST009("ST009", "조회일자 범위가 7일을 초과합니다.", DateRangeExceeds7Days.class, HttpStatus.BAD_REQUEST);
 
     private final String code;
     private final String message;
@@ -66,5 +83,4 @@ public enum ErrorType {
                 .findFirst()
                 .orElseThrow(RuntimeException::new);
     }
-
 }
