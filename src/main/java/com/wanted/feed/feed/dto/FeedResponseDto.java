@@ -67,6 +67,7 @@ public class FeedResponseDto {
         if (content.length() <= MAX_CONTENT_LENGTH) {
             return content;
         }
+
         return content.substring(0, MAX_CONTENT_LENGTH);
     }
 
