@@ -5,7 +5,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import com.wanted.feed.common.response.JwtResponse;
 import com.wanted.feed.common.util.TokenProvider;
-import com.wanted.feed.exception.ErrorType;
+import com.wanted.feed.common.exception.ErrorType;
 import com.wanted.feed.user.domain.User;
 import com.wanted.feed.user.domain.UserRepository;
 import org.junit.jupiter.api.BeforeEach;

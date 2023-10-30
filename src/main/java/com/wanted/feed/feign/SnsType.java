@@ -1,6 +1,6 @@
 package com.wanted.feed.feign;
 
-import com.wanted.feed.exception.client.SnsNotSupportException;
+import com.wanted.feed.feign.exception.SnsNotSupportException;
 import java.util.Arrays;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

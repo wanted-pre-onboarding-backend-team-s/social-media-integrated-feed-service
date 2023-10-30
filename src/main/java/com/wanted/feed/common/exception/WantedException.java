@@ -1,4 +1,4 @@
-package com.wanted.feed.exception;
+package com.wanted.feed.common.exception;
 
 import lombok.Getter;
 

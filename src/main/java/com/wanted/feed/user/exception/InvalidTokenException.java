@@ -1,5 +1,5 @@
 package com.wanted.feed.user.exception;
 
-import com.wanted.feed.exception.WantedException;
+import com.wanted.feed.common.exception.WantedException;
 
 public class InvalidTokenException extends WantedException {}

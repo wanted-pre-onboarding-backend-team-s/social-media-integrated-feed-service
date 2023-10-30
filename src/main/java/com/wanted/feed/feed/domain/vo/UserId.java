@@ -1,6 +1,6 @@
 package com.wanted.feed.feed.domain.vo;
 
-import com.wanted.feed.exception.feed.like.LikeUserIdNotNullException;
+import com.wanted.feed.feed.exception.like.LikeUserIdNotNullException;
 import jakarta.persistence.Embeddable;
 import java.util.Objects;
 import lombok.AccessLevel;

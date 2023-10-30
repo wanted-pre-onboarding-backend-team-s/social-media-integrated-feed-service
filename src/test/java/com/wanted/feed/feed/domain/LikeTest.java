@@ -3,8 +3,8 @@ package com.wanted.feed.feed.domain;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.wanted.feed.exception.feed.like.LikeFeedIdNotNullException;
-import com.wanted.feed.exception.feed.like.LikeUserIdNotNullException;
+import com.wanted.feed.feed.exception.like.LikeFeedIdNotNullException;
+import com.wanted.feed.feed.exception.like.LikeUserIdNotNullException;
 import com.wanted.feed.feed.domain.vo.FeedId;
 import com.wanted.feed.feed.domain.vo.UserId;
 import org.junit.jupiter.api.DisplayName;

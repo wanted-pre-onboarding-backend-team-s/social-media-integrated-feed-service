@@ -1,7 +1,7 @@
 package com.wanted.feed.feed.domain;
 
-import com.wanted.feed.exception.feed.like.LikeFeedIdNotNullException;
-import com.wanted.feed.exception.feed.like.LikeUserIdNotNullException;
+import com.wanted.feed.feed.exception.like.LikeFeedIdNotNullException;
+import com.wanted.feed.feed.exception.like.LikeUserIdNotNullException;
 import com.wanted.feed.feed.domain.vo.FeedId;
 import com.wanted.feed.feed.domain.vo.UserId;
 import jakarta.persistence.Embedded;
